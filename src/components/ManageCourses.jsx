@@ -5,10 +5,12 @@ import {
   Heading,
   Text,
   useBreakpointValue,
+  ButtonGroup,
 } from "@chakra-ui/react";
-import SignupModal from "./Modal";
+import ComfirmDelete from "./ComfirmDelete";
+import { Link as NavLink } from "react-router-dom";
 
-const MentorshipCard = () => {
+const ManageCourses = () => {
   const mentorshipPlans = [
     {
       title: "Basic",
@@ -34,15 +36,15 @@ const MentorshipCard = () => {
   console.log("hello");
 
   return (
-    <Box py={20}>
+    <Box m={"auto"}>
       <Heading as="h2" color="white" textAlign="center" mb={10}>
-        Choose Your Mentorship Plan
+        Manage course
       </Heading>
       <Flex
         justify="center"
         flexWrap={isLargeScreen ? "nowrap" : "wrap"}
         gap={isLargeScreen ? "6px" : "20px"}
-        mx={{ base: "auto", lg: 0 }}
+        mx={{ base: "auto", md: "auto" }}
         maxW={{ base: "80vw", lg: "1200px" }}>
         {mentorshipPlans.map((plan, index) => (
           <Box
@@ -63,12 +65,16 @@ const MentorshipCard = () => {
             <Text color="white" mb={4}>
               Price: {plan.price}
             </Text>
-            <SignupModal />
+            <ButtonGroup>
+              <ComfirmDelete />
+              <Button colorScheme="green">
+                <NavLink to="/admin/edit-course">Edit</NavLink>
+              </Button>
+            </ButtonGroup>
           </Box>
         ))}
       </Flex>
     </Box>
   );
 };
-
-export default MentorshipCard;
+export default ManageCourses;

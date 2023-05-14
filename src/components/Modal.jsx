@@ -15,8 +15,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function SignupModal() {
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -29,61 +31,69 @@ export default function SignupModal() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    // Handle form submission here
     onClose();
+    navigate("/dashboard");
   }
 
   return (
     <>
-      <Button colorScheme="blue" onClick={onOpen}>
+      <Button colorScheme="green" onClick={onOpen}>
         PAY & JOIN NOW
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Sign up</ModalHeader>
-          <ModalCloseButton />
+        <ModalContent backgroundColor="gray.900">
+          <ModalHeader color="#fff">Sign up</ModalHeader>
+          <ModalCloseButton color="#fff" />
           <ModalBody>
-            <FormControl id="fullName" isRequired>
-              <FormLabel>Full Name</FormLabel>
-              <Input
-                type="text"
-                value={fullName}
-                onChange={(event) => setFullName(event.target.value)}
-                style={{ borderColor: "gray.300", borderRadius: "md" }}
-              />
-            </FormControl>
-
-            <FormControl id="email" isRequired mt={4}>
-              <FormLabel>Email Address</FormLabel>
-              <Input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                style={{ borderColor: "gray.300", borderRadius: "md" }}
-              />
-            </FormControl>
-
-            <FormControl id="password" isRequired mt={4}>
-              <FormLabel>Password</FormLabel>
-              <InputGroup>
+            <form action="">
+              <FormControl id="fullName" isRequired>
+                <FormLabel color="#fff">Full Name</FormLabel>
                 <Input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
+                  backgroundColor="gray.700"
+                  color="gray.100"
+                  type="text"
+                  value={fullName}
+                  onChange={(event) => setFullName(event.target.value)}
                   style={{ borderColor: "gray.300", borderRadius: "md" }}
                 />
-                <InputRightElement>
-                  <Button
-                    size="sm"
-                    onClick={handleTogglePassword}
-                    fontSize="sm">
-                    {showPassword ? "Hide" : "Show"}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
+              </FormControl>
+
+              <FormControl id="email" isRequired mt={4}>
+                <FormLabel color="#fff">Email Address</FormLabel>
+                <Input
+                  backgroundColor="gray.700"
+                  color="gray.100"
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  style={{ borderColor: "gray.300", borderRadius: "md" }}
+                />
+              </FormControl>
+
+              <FormControl id="password" isRequired mt={4}>
+                <FormLabel color="#fff">Password</FormLabel>
+                <InputGroup>
+                  <Input
+                    backgroundColor="gray.700"
+                    color="gray.100"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    style={{ borderColor: "gray.300", borderRadius: "md" }}
+                  />
+                  <InputRightElement>
+                    <Button
+                      size="sm"
+                      onClick={handleTogglePassword}
+                      fontSize="sm">
+                      {showPassword ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+              </FormControl>
+            </form>
           </ModalBody>
 
           <ModalFooter>

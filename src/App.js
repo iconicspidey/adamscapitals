@@ -1,50 +1,23 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { lazy } from "react";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import Footer from "./components/Footer";
 import { ChakraProvider } from "@chakra-ui/react";
-import { extendTheme } from "@chakra-ui/react";
-
-const theme = extendTheme({
-  colors: {
-    brand: {
-      50: "#e6f9ff",
-      100: "#c2e2f2",
-      200: "#9ecbeb",
-      300: "#7ab3e3",
-      400: "#579bdd",
-      500: "#3a77c5",
-      600: "#2c5b9e",
-      700: "#1d3e78",
-      800: "#0f2351",
-      900: "#000c2b",
-    },
-    accent: {
-      50: "#fff7e6",
-      100: "#ffe1b2",
-      200: "#ffc07f",
-      300: "#ff9e4c",
-      400: "#ff7d1a",
-      500: "#e65a00",
-      600: "#b34600",
-      700: "#813100",
-      800: "#4f1e00",
-      900: "#1e0a00",
-    },
-    dark: {
-      50: "#f5f5f5",
-      100: "#d9d9d9",
-      200: "#bfbfbf",
-      300: "#a6a6a6",
-      400: "#8c8c8c",
-      500: "#737373",
-      600: "#595959",
-      700: "#404040",
-      800: "#262626",
-      900: "#0d0d0d",
-    },
-  },
-});
+import FormComponent from "./pages/Form";
+import Login from "./components/Login";
+import ForgetPassword from "./components/ForgetPassword";
+import NotFound from "./pages/404";
+import StudentDashboard from "./pages/Student";
+import ChangePassword from "./components/ChangePassword";
+import Courses from "./components/courses";
+import StudentProfile from "./components/StudentProfile";
+import AdminDashboard from "./pages/Admin";
+import StudentTable from "./components/StudentTable";
+import AdminLinks from "./components/AdminLinks";
+import CourseForm from "./components/CourseForm";
+import ManageCourses from "./components/ManageCourses";
+import EditCourse from "./components/EditCourse";
 
 function App() {
   return (
@@ -53,6 +26,26 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/account" element={<FormComponent />}>
+            <Route path="/account" element={<Login />} />
+            <Route
+              path="/account/forget_password"
+              element={<ForgetPassword />}
+            />
+          </Route>
+          <Route path="/dashboard" element={<StudentDashboard />}>
+            <Route path="/dashboard" element={<Courses />} />
+            <Route path="/dashboard/password" element={<ChangePassword />} />
+            <Route path="/dashboard/profile" element={<StudentProfile />} />
+          </Route>
+          <Route path="/admin" element={<AdminDashboard />}>
+            <Route path="/admin" element={<AdminLinks />} />
+            <Route path="/admin/student-table" element={<StudentTable />} />
+            <Route path="/admin/course-form" element={<CourseForm />} />
+            <Route path="/admin/manage-courses" element={<ManageCourses />} />
+            <Route path="/admin/edit-course" element={<EditCourse />} />
+          </Route>
+          <Route path="/*" element={<NotFound />} />
         </Routes>
         <Footer />
       </Router>

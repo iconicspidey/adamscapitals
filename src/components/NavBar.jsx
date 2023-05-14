@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, IconButton, Image, Text, Link } from "@chakra-ui/react";
 import { AiOutlineMenu } from "react-icons/ai";
 import logo from "../assets/logo.jpg";
+import { Link as NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   const handleToggleMenu = () => setShowMenu(!showMenu);
-
   return (
     <Flex
       as="nav"
@@ -16,10 +16,9 @@ const Navbar = () => {
       wrap="wrap"
       padding={4}
       bg="gray.800"
-      color="white"
-    >
+      color="white">
       <Box>
-        <Image src={logo} alt="Logo" h={10}  rounded={"3xl"}/>
+        <Image src={logo} alt="Logo" h={10} rounded={"3xl"} />
       </Box>
       <IconButton
         display={{ base: "block", md: "none" }}
@@ -35,8 +34,7 @@ const Navbar = () => {
         display={{ base: showMenu ? "block" : "none", md: "flex" }}
         width={{ base: "full", md: "auto" }}
         alignItems="center"
-        flexGrow={1}
-      >
+        flexGrow={1}>
         <Flex
           as="ul"
           listStyleType="none"
@@ -44,16 +42,19 @@ const Navbar = () => {
           justify={{ base: "center", md: "flex-end" }}
           flexDirection={{ base: "column", md: "row" }}
           padding={0}
-          m={0}
-        >
+          m={0}>
           <Box as="li" mx={4}>
-            <Text fontSize="lg">Home</Text>
+            <Link to="/" as={NavLink}>
+              Home
+            </Link>
           </Box>
           <Box as="li" mx={4}>
-            <Text fontSize="lg">About</Text>
+            <Link as={NavLink}>Courses</Link>
           </Box>
           <Box as="li" mx={4}>
-            <Text fontSize="lg">Contact</Text>
+            <Link to="/account" as={NavLink}>
+              Login
+            </Link>
           </Box>
         </Flex>
       </Box>
