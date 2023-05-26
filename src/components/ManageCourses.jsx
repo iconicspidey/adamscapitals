@@ -9,31 +9,27 @@ import {
 } from "@chakra-ui/react";
 import ComfirmDelete from "./ComfirmDelete";
 import { Link as NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axiosFetch from "./../configs/axiosConfig";
+import { useDispatch, useSelector } from "react-redux";
+import { setCourses } from "../redux-slice/coursesSlice";
 
 const ManageCourses = () => {
-  const mentorshipPlans = [
-    {
-      title: "Basic",
-      price: "$100",
-      description:
-        "Get access to basic mentorship and learn the fundamentals of forex trading.",
-    },
-    {
-      title: "Advanced",
-      price: "$250",
-      description:
-        "Get access to advanced mentorship and learn advanced forex trading strategies.",
-    },
-    {
-      title: "Premium",
-      price: "$500",
-      description:
-        "Get access to premium mentorship and learn the most advanced forex trading strategies from experts.",
-    },
-  ];
-
+  const mentorship = useSelector((state) => state.courses);
+  const dispatch = useDispatch();
   const isLargeScreen = useBreakpointValue({ base: false, lg: true });
-  console.log("hello");
+  console.log(mentorship);
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axiosFetch().get("/courses");
+        const { data } = response;
+        dispatch(setCourses(data));
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   return (
     <Box m={"auto"}>
@@ -46,7 +42,7 @@ const ManageCourses = () => {
         gap={isLargeScreen ? "6px" : "20px"}
         mx={{ base: "auto", md: "auto" }}
         maxW={{ base: "80vw", lg: "1200px" }}>
-        {mentorshipPlans.map((plan, index) => (
+        {mentorship.map((plan, index) => (
           <Box
             key={index}
             borderWidth="1px"
@@ -66,9 +62,11 @@ const ManageCourses = () => {
               Price: {plan.price}
             </Text>
             <ButtonGroup>
-              <ComfirmDelete />
+              <ComfirmDelete props={{ id: plan.course_id }} />
               <Button colorScheme="green">
-                <NavLink to="/admin/edit-course">Edit</NavLink>
+                <NavLink state={plan} to="/admin/edit-course">
+                  Edit
+                </NavLink>
               </Button>
             </ButtonGroup>
           </Box>

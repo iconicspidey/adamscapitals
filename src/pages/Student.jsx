@@ -1,8 +1,11 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import StudentSideBar from "../components/studentSideBar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function StudentDashboard() {
+  const { full_name, role } = useSelector((state) => state.user);
+
   return (
     <Box
       p="8"
@@ -10,9 +13,9 @@ function StudentDashboard() {
       minHeight={"calc(100vh - 301px)"}
       bgColor="gray.800">
       <StudentSideBar />
-      <Heading color="white" as="h1" mb="8">
-        Welcome, spidey!
-      </Heading>
+      <Text fontSize={30} color="white" my={5} px={10}>
+        Welcome {full_name}!
+      </Text>
       <Outlet />
     </Box>
   );

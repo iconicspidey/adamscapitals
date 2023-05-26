@@ -8,7 +8,14 @@ import {
   GridItem,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { FaUsers, FaCog, FaPen, FaStore, FaBook } from "react-icons/fa";
+import {
+  FaUsers,
+  FaCog,
+  FaPen,
+  FaStore,
+  FaBook,
+  FaPalfed,
+} from "react-icons/fa";
 import { Link as NavLink } from "react-router-dom";
 
 export default function AdminLinks() {
@@ -69,7 +76,7 @@ export default function AdminLinks() {
         <Flex align="center" flexDir={"column"}>
           <Icon as={FaCog} color="white" w={6} h={6} mr="4" />
           <Text fontWeight="bold" color="white" fontSize="lg">
-            Settings
+            Manage courses
           </Text>
         </Flex>
       </GridItem>
@@ -79,13 +86,13 @@ export default function AdminLinks() {
         borderRadius="lg"
         boxShadow="lg"
         as={NavLink}
-        to={"/admin/edit-course"}
+        to={"/admin/change-password"}
         bgColor="gray.900"
         mb={{ base: "6", md: "0" }}>
         <Flex align="center" flexDir={"column"}>
-          <Icon as={FaPen} color="white" w={6} h={6} mr="4" />
+          <Icon as={FaPalfed} color="white" w={6} h={6} mr="4" />
           <Text fontWeight="bold" color="white" fontSize="lg">
-            Edit Course
+            password
           </Text>
         </Flex>
       </GridItem>

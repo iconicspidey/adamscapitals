@@ -3,9 +3,11 @@ import { Box, Flex, IconButton, Image, Text, Link } from "@chakra-ui/react";
 import { AiOutlineMenu } from "react-icons/ai";
 import logo from "../assets/logo.jpg";
 import { Link as NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const { role, logged } = useSelector((state) => state.user);
 
   const handleToggleMenu = () => setShowMenu(!showMenu);
   return (
@@ -49,11 +51,33 @@ const Navbar = () => {
             </Link>
           </Box>
           <Box as="li" mx={4}>
-            <Link as={NavLink}>Courses</Link>
+            <Link to="/#about" as={NavLink}>
+              Courses
+            </Link>
           </Box>
           <Box as="li" mx={4}>
-            <Link to="/account" as={NavLink}>
+            <Link
+              display={`${!logged ? "block" : "none"}`}
+              to="/account"
+              as={NavLink}>
               Login
+            </Link>
+          </Box>
+          <Box as="li" mx={4}>
+            <Link
+              display={`${logged ? "block" : "none"}`}
+              to={`${role == "admin" ? "/admin" : "/dashboard"}`}
+              as={NavLink}>
+              Dashboard
+            </Link>
+          </Box>
+          <Box as="li" mx={4}>
+            <Link
+              color="red.400"
+              display={`${logged ? "block" : "none"}`}
+              to="/account"
+              as={NavLink}>
+              Logout
             </Link>
           </Box>
         </Flex>

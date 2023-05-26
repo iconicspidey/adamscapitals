@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -6,8 +6,6 @@ import {
   Heading,
   Text,
   ButtonGroup,
-  Image,
-  Icon,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, ArrowDownIcon } from "@chakra-ui/icons";
 
@@ -87,39 +85,21 @@ const Home = () => {
         <TestimonialsSlider />
       </Box>
       {/*  */}
-      <Box bg="gray.800">
+      <Box bg="gray.800" id="#about">
         <Box textAlign="center" maxW="800px" mx="auto" py="8">
           <Heading as="h2" color="white" size="2xl" mb="4">
             About Us
           </Heading>
-          <Text fontSize="xl" color="gray">
-            Welcome to our forex trading mentorship platform, where we offer
-            personalized guidance and support to help you become a successful
-            trader. Our team of experienced traders and educators has helped
-            countless individuals achieve their trading goals through our
-            comprehensive mentorship program.
-          </Text>
-          <Text fontSize="xl" color="gray" mt="4">
-            At our forex trading mentorship platform, we understand that trading
-            can be challenging, especially for beginners. That's why we offer
-            one-on-one coaching sessions, educational resources, and access to
-            our trading community to help you stay motivated and informed. Our
-            program is designed to help you develop the skills and knowledge you
-            need to navigate the forex market with confidence.
-          </Text>
-          <Text fontSize="xl" color="gray" mt="4">
-            Our mentorship platform is flexible and customizable, with a range
-            of features that cater to your individual needs. You can choose from
-            our different mentorship packages, depending on your trading
-            experience and goals. Our mentors will work with you to create a
-            personalized trading plan, and provide ongoing support and feedback
-            to help you improve your trading skills.
-          </Text>
-          <Text fontSize="xl" color="gray" mt="4">
-            Our forex trading mentorship platform is committed to your success.
-            We believe that with the right guidance and support, anyone can
-            become a successful trader. Join us today and start your journey
-            towards financial freedom.
+          <Text fontSize="xl" color="white" mt="4">
+            Our forex trading mentorship platform offers personalized guidance
+            and comprehensive programs to help individuals become successful
+            traders. With experienced mentors, one-on-one coaching, educational
+            resources, and a supportive trading community, we provide the
+            necessary tools for traders to navigate the forex market with
+            confidence. Our flexible packages cater to different experience
+            levels and goals, with personalized trading plans and ongoing
+            support. Join us today and embark on your journey towards financial
+            freedom.
           </Text>
         </Box>
       </Box>

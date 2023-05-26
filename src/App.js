@@ -1,5 +1,10 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { lazy } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { lazy, useEffect } from "react";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import Footer from "./components/Footer";
@@ -12,14 +17,19 @@ import StudentDashboard from "./pages/Student";
 import ChangePassword from "./components/ChangePassword";
 import Courses from "./components/courses";
 import StudentProfile from "./components/StudentProfile";
-import AdminDashboard from "./pages/Admin";
-import StudentTable from "./components/StudentTable";
 import AdminLinks from "./components/AdminLinks";
+import StudentTable from "./components/StudentTable";
 import CourseForm from "./components/CourseForm";
 import ManageCourses from "./components/ManageCourses";
+import AdminPassword from "./components/AdminPassword";
 import EditCourse from "./components/EditCourse";
-
+import AdminDashboard from "./pages/Admin";
+import { AdminAuth, StudentAuth } from "./auth/RequireAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "./redux-slice/userSlice";
 function App() {
+  const { role, logged } = useSelector((state) => state.user);
+
   return (
     <ChakraProvider>
       <Router>
@@ -33,18 +43,25 @@ function App() {
               element={<ForgetPassword />}
             />
           </Route>
+          {/*  */}
           <Route path="/dashboard" element={<StudentDashboard />}>
-            <Route path="/dashboard" element={<Courses />} />
-            <Route path="/dashboard/password" element={<ChangePassword />} />
-            <Route path="/dashboard/profile" element={<StudentProfile />} />
+            <Route path="" element={<Courses />}>
+              <Route path="/dashboard/password" element={<ChangePassword />} />
+              <Route path="/dashboard/profile" element={<StudentProfile />} />
+            </Route>
           </Route>
+          {/*  */}
+          {/* <Route element={<AdminAuth auth={{ logged, role }} />}> */}
           <Route path="/admin" element={<AdminDashboard />}>
-            <Route path="/admin" element={<AdminLinks />} />
-            <Route path="/admin/student-table" element={<StudentTable />} />
-            <Route path="/admin/course-form" element={<CourseForm />} />
-            <Route path="/admin/manage-courses" element={<ManageCourses />} />
-            <Route path="/admin/edit-course" element={<EditCourse />} />
+            <Route path="" element={<AdminLinks />} />
+            <Route path="student-table" element={<StudentTable />} />
+            <Route path="course-form" element={<CourseForm />} />
+            <Route path="manage-courses" element={<ManageCourses />} />
+            <Route path="edit-course" element={<EditCourse />} />
+            <Route path="change-password" element={<AdminPassword />} />
           </Route>
+          {/* </Route> */}
+
           <Route path="/*" element={<NotFound />} />
         </Routes>
         <Footer />

@@ -1,13 +1,25 @@
-import { Box, Flex, Heading, IconButton, Link, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  Heading,
+  IconButton,
+  Link,
+  Text,
+  Spinner,
+} from "@chakra-ui/react";
 import { FaDiscord } from "react-icons/fa";
+import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
+import axiosFetch from "./../configs/axiosConfig";
 
 function Courses() {
-  const plan = {
-    title: "Basic",
-    price: "$100",
-    description:
-      "Get access to basic mentorship and learn the fundamentals of forex trading.",
-  };
+  const { user_id } = useSelector((state) => state.user);
+  const { data, status, isLoading, error } = useQuery("courses", async () => {
+    const response = await axiosFetch().get(`/student-course/${user_id}`);
+    const { data } = response;
+    return data;
+  });
+
   return (
     <Box>
       <Heading
@@ -18,46 +30,42 @@ function Courses() {
         py="10px">
         Plans
       </Heading>
-      <Flex wrap="wrap" justify="center" gap="10px">
-        <Box
-          borderWidth="1px"
-          borderRadius="lg"
-          overflow="hidden"
-          flex={{ base: "lg", md: "base" }}
-          p={6}
-          bg="gray.900">
-          <Heading as="h3" mb={4} color="white" fontSize="xl">
-            {plan.title}
-          </Heading>
-          <Text color="white" mb={4}>
-            {plan.description}
+      <Box>
+        <Grid
+          templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+          width={"100%"}
+          gap={6}>
+          {status == "success" && data.length
+            ? data.map((plan) => (
+                <Box
+                  key={plan.course_id}
+                  borderWidth="1px"
+                  borderRadius="lg"
+                  overflow="hidden"
+                  p={6}
+                  bg="gray.900">
+                  <Heading as="h3" mb={4} color="white" fontSize="xl">
+                    {plan.plan}
+                  </Heading>
+                  <Text color="white" mb={4}>
+                    {plan.description}
+                  </Text>
+                  <Link isExternal>
+                    <IconButton aria-label="discord" icon={<FaDiscord />} />
+                  </Link>
+                </Box>
+              ))
+            : null}
+        </Grid>
+        {isLoading ? (
+          <Spinner display={"block"} m={"auto"} color="blue.500" size="xl" />
+        ) : null}
+        {status == "success" && !data.length ? (
+          <Text textAlign="center" m={"auto"} color="white">
+            You have no plan
           </Text>
-          <Link isExternal>
-            <IconButton aria-label="discord" icon={<FaDiscord />}>
-              server
-            </IconButton>
-          </Link>
-        </Box>
-        <Box
-          borderWidth="1px"
-          borderRadius="lg"
-          overflow="hidden"
-          flex={{ base: "lg", md: "base" }}
-          p={6}
-          bg="gray.900">
-          <Heading as="h3" mb={4} color="white" fontSize="xl">
-            {plan.title}
-          </Heading>
-          <Text color="white" mb={4}>
-            {plan.description}
-          </Text>
-          <Link isExternal="true">
-            <IconButton aria-label="discord" icon={<FaDiscord />}>
-              server
-            </IconButton>
-          </Link>
-        </Box>
-      </Flex>
+        ) : null}
+      </Box>
     </Box>
   );
 }

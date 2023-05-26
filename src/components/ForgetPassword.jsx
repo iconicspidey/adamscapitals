@@ -10,6 +10,7 @@ import {
   FormErrorMessage,
   ButtonGroup,
   FormErrorIcon,
+  Text
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
@@ -34,13 +35,19 @@ function ForgetPassword() {
     }
     try {
       const response = await axiosFetch().post("/forgot-password", { email });
-      if (response.status == 201) {
-        setError("");
-        setSuccessMessage(`A password reset email has been sent to ${email}`);
-      }
+
+      setError("");
+      setSuccessMessage(`A password reset email has been sent to ${email}`);
+
       setIsSubmitting(false);
     } catch (error) {
-      setError(error.response.data);
+      const { status, data } = error.response;
+      if (status == 400) {
+        setError("enter a valid email");
+      }
+      if (status == 404) {
+        setError("you do not have an account with this email");
+      }
       setIsSubmitting(false);
     }
   };
@@ -89,6 +96,7 @@ function ForgetPassword() {
               {successMessage}
             </Box>
           )}
+          {error && <Text color="red">{error}</Text>}
         </VStack>
       </form>
     </Box>

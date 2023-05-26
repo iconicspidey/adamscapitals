@@ -13,7 +13,7 @@ import axiosFetch from "../configs/axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const ChangePassword = () => {
+const AdminPassword = () => {
   const { user_id, token } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,7 +29,6 @@ const ChangePassword = () => {
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
-    wrong: false,
   });
 
   const handleForm = async (e) => {
@@ -172,4 +171,4 @@ const ChangePassword = () => {
   );
 };
 
-export default ChangePassword;
+export default AdminPassword;

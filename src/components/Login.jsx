@@ -16,13 +16,17 @@ import {
 } from "@chakra-ui/react";
 import { Link as Password, useNavigate } from "react-router-dom";
 import axiosFetch from "../configs/axiosConfig";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux-slice/userSlice";
+
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setError] = useState({
-    email: "",
-    password: "",
+    email: null,
+    password: null,
     state: false,
   });
   const [isLoading, setLoading] = useState(false);
@@ -36,13 +40,42 @@ export default function Login() {
     };
     try {
       const response = await axiosFetch().post("/signin", userData);
+
       if (response.status == 200) {
-        navigate("/dashboard");
+        const { data } = response;
+        setLoading(false);
+        setError(() => {
+          return { state: false, email: null, password: null };
+        });
+        // localStorage.setItem("user", JSON.stringify({ ...data, logged: true }));
+        dispatch(setUser(data));
+        if (data.role === "admin") {
+          navigate("/admin", { replace: false });
+        } else {
+          navigate("/dashboard", { replace: false });
+        }
       }
-      setLoading(false);
     } catch (error) {
-      console.error(error.response.data);
-      setLoading(false);
+      const { data, status } = error.response;
+
+      if (error.response) {
+        setError((prev) => {
+          return {
+            ...prev,
+            email: data.user,
+            password: data.password,
+          };
+        });
+        setLoading(false);
+      }
+      if (status == 401) {
+        setError((prev) => {
+          return {
+            ...prev,
+            state: true,
+          };
+        });
+      }
     }
   };
 
@@ -69,7 +102,7 @@ export default function Login() {
             />
             <FormErrorMessage>
               <FormErrorIcon mr={2} />
-              {errors.email}
+              {errors.email} email
             </FormErrorMessage>
           </FormControl>
           <FormControl id="password" isInvalid={errors.password} isRequired>
@@ -83,9 +116,10 @@ export default function Login() {
             />
             <FormErrorMessage>
               <FormErrorIcon mr={2} />
-              {errors.password}
+              password {errors.password}
             </FormErrorMessage>
           </FormControl>
+          {errors.state ? <Text color="red">wrong credentials</Text> : null}
           <Button
             type="submit"
             isLoading={isLoading}
@@ -101,7 +135,6 @@ export default function Login() {
             fontSize="sm">
             Forgot password?
           </Link>
-          <Text color="red"></Text>
         </VStack>
       </form>
     </Box>
