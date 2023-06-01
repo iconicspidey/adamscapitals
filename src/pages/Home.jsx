@@ -8,7 +8,7 @@ import {
   ButtonGroup,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, ArrowDownIcon } from "@chakra-ui/icons";
-
+import { PaystackButton, usePaystackPayment } from "react-paystack";
 import logo from "../assets/logo.jpg";
 import MentorshipCard from "../components/MentorshipCard";
 import TestimonialsSlider from "../components/TestimonialsSlider";

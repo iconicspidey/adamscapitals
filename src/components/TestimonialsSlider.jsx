@@ -39,7 +39,7 @@ const TestimonialsSlider = () => {
 
   return (
     <Box maxW="600px" mx="auto" px="4">
-      <Heading as="h2" color={"white"} textAlign="center" mb="6">
+      <Heading as="h3" color={"white"} textAlign="center" mb="6">
         What Our Customers Say
       </Heading>
       <Flex
@@ -47,8 +47,7 @@ const TestimonialsSlider = () => {
         align="center"
         borderWidth="1px"
         borderRadius="md"
-        p="6"
-      >
+        p="6">
         <Box flex="1">
           <Text fontSize="xl" color={"white"} fontWeight="bold" mb="2">
             {activeTestimonial.name}
@@ -56,7 +55,9 @@ const TestimonialsSlider = () => {
           <Text fontSize="lg" color={"white"} fontWeight="semibold" mb="2">
             {activeTestimonial.title}
           </Text>
-          <Text color={"white"} fontSize="md">{activeTestimonial.text}</Text>
+          <Text color={"white"} fontSize="md">
+            {activeTestimonial.text}
+          </Text>
         </Box>
         <Flex align="center">
           <Box
@@ -73,7 +74,6 @@ const TestimonialsSlider = () => {
             cursor="pointer"
             onClick={handleNextClick}
             bg={"whiteAlpha.300"}
-
           />
         </Flex>
       </Flex>

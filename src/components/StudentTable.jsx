@@ -14,10 +14,9 @@ import axiosFetch from "./../configs/axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteStudent from "./DeleteStudent";
 import { useQuery } from "react-query";
-
+import moment from "moment";
 const StudentTable = () => {
   const dispatch = useDispatch();
-
   const {
     data: students,
     status,
@@ -35,14 +34,14 @@ const StudentTable = () => {
       </Text>
       <Table
         margin="auto"
-        maxWidth={{ base: "full", md: "lg", lg: "2xl" }}
+        maxWidth={{ base: "full", md: "md", lg: "lg" }}
         variant="simple">
         <Thead>
           <Tr>
             <Th>Name</Th>
             <Th>Email</Th>
             <Th>Plan</Th>
-            <Th>Plan expired</Th>
+            <Th>Plan status</Th>
             <Th>Actions</Th>
           </Tr>
         </Thead>
@@ -53,7 +52,13 @@ const StudentTable = () => {
                 <Td>{student.full_name}</Td>
                 <Td>{student.email}</Td>
                 <Td>{student.plan}</Td>
-                <Td>{student.createdAt}</Td>
+                <Td>
+                  {moment().diff(student.createdAt, "month") <= 1 ? (
+                    <Text color="lightgreen">Active</Text>
+                  ) : (
+                    <Text color="red.400">Expired</Text>
+                  )}
+                </Td>
                 <Td>
                   <DeleteStudent
                     props={{ id: student.user_id, name: student.full_name }}

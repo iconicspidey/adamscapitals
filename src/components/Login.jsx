@@ -47,8 +47,11 @@ export default function Login() {
         setError(() => {
           return { state: false, email: null, password: null };
         });
-        // localStorage.setItem("user", JSON.stringify({ ...data, logged: true }));
-        dispatch(setUser(data));
+        localStorage.setItem(
+          "token",
+          JSON.stringify({ ...data, logged: true })
+        );
+        dispatch(setUser({ ...data, logged: true }));
         if (data.role === "admin") {
           navigate("/admin", { replace: false });
         } else {
@@ -97,7 +100,7 @@ export default function Login() {
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              placeholder="mail"
+              placeholder="email"
               color="white"
             />
             <FormErrorMessage>

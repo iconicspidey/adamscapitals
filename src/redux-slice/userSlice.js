@@ -17,7 +17,14 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase("logout", (state, actions) => {
       state = {};
-      localStorage.clear("user");
+      localStorage.clear("token");
+    });
+    builder.addCase("localstorage", (state, actions) => {
+      const user = JSON.parse(localStorage.getItem("token"));
+      if (user) {
+        return { ...user };
+      }
+      return {};
     });
   },
 });

@@ -1,123 +1,172 @@
 import {
   Button,
   FormControl,
+  FormErrorIcon,
+  FormErrorMessage,
   FormLabel,
   Input,
   InputGroup,
   InputRightElement,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axiosFetch from "../configs/axiosConfig";
 
-export default function SignupModal() {
+export default function SignupModal({ plan: mentorship }) {
   const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [showPassword, setShowPassword] = useState(false);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [input, setInput] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  function handleTogglePassword() {
-    setShowPassword(!showPassword);
-  }
-
-  function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    onClose();
-    navigate("/dashboard");
-  }
+    // onClose();
+
+    try {
+      const { fullName: name, password, email } = input;
+      const response = await axiosFetch().post("/signup", {
+        name,
+        password,
+        email,
+      });
+      navigate("/account/login");
+    } catch (error) {
+      const { data, status } = error.response;
+      console.log(data, status);
+
+      setError((prev) => ({ ...prev, ...data }));
+    }
+  };
+
+  const formData = (event) => {
+    setError({ fullName: "", email: "", password: "" });
+    const { value, name } = event.target;
+    setInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   return (
-    <>
-      <Button colorScheme="green" onClick={onOpen}>
-        PAY & JOIN NOW
-      </Button>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent backgroundColor="gray.900">
-          <ModalHeader color="#fff">Sign up</ModalHeader>
-          <ModalCloseButton color="#fff" />
-          <ModalBody>
-            <form action="">
-              <FormControl id="fullName" isRequired>
-                <FormLabel color="#fff">Full Name</FormLabel>
-                <Input
-                  backgroundColor="gray.700"
-                  color="gray.100"
-                  type="text"
-                  value={fullName}
-                  onChange={(event) => setFullName(event.target.value)}
-                  style={{ borderColor: "gray.300", borderRadius: "md" }}
-                />
-              </FormControl>
-
-              <FormControl id="email" isRequired mt={4}>
-                <FormLabel color="#fff">Email Address</FormLabel>
-                <Input
-                  backgroundColor="gray.700"
-                  color="gray.100"
-                  type="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  style={{ borderColor: "gray.300", borderRadius: "md" }}
-                />
-              </FormControl>
-
-              <FormControl id="password" isRequired mt={4}>
-                <FormLabel color="#fff">Password</FormLabel>
-                <InputGroup>
-                  <Input
-                    backgroundColor="gray.700"
-                    color="gray.100"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    style={{ borderColor: "gray.300", borderRadius: "md" }}
-                  />
-                  <InputRightElement>
-                    <Button
-                      size="sm"
-                      onClick={handleTogglePassword}
-                      fontSize="sm">
-                      {showPassword ? "Hide" : "Show"}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-              </FormControl>
-            </form>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button
-              colorScheme="gray"
-              mr={3}
-              onClick={onClose}
-              style={{ borderColor: "gray.300", borderRadius: "md" }}>
-              Cancel
-            </Button>
-            <Button
-              colorScheme="blue"
-              onClick={handleSubmit}
-              style={{
+    <form onSubmit={handleSubmit}>
+      <VStack
+        spacing={4}
+        border="1px"
+        borderColor="gray.300"
+        borderRadius="md"
+        p={6}>
+        <FormControl isInvalid={error.name} width="100%">
+          <FormLabel htmlFor="fullName" color="#fff">
+            Full Name
+          </FormLabel>
+          <Input
+            id="fullName"
+            isRequired
+            backgroundColor="gray.700"
+            color="gray.100"
+            placeholder="Names"
+            type="text"
+            value={input.fullName}
+            name="fullName"
+            onChange={formData}
+            borderRadius="md"
+            _placeholder={{
+              color: "gray.300",
+            }}
+            _focus={{
+              borderColor: "blue.300",
+            }}
+          />
+          <FormErrorMessage>
+            <FormErrorIcon />
+            {error.name}
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl id="email" isInvalid={error.email} width="100%">
+          <FormLabel htmlFor="email" color="#fff">
+            Email Address
+          </FormLabel>
+          <Input
+            id="email"
+            isRequired
+            backgroundColor="gray.700"
+            color="gray.100"
+            type="email"
+            placeholder="Emaail"
+            value={input.email}
+            name="email"
+            onChange={formData}
+            borderRadius="md"
+            _placeholder={{
+              color: "gray.300",
+            }}
+            _focus={{
+              borderColor: "blue.300",
+            }}
+          />
+          <FormErrorMessage>
+            <FormErrorIcon />
+            {error.email}
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl id="password" isInvalid={error.password} width="100%">
+          <FormLabel htmlFor="password" color="#fff">
+            Password
+          </FormLabel>
+          <InputGroup>
+            <Input
+              id="password"
+              isRequired
+              placeholder="password"
+              backgroundColor="gray.700"
+              color="gray.100"
+              type={showPassword ? "text" : "password"}
+              value={input.password}
+              name="password"
+              onChange={formData}
+              borderRadius="md"
+              _placeholder={{
+                color: "gray.300",
+              }}
+              _focus={{
                 borderColor: "blue.300",
-                borderRadius: "md",
-                bg: "blue.400",
-                _hover: { bg: "blue.500" },
-              }}>
-              Proceed
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+              }}
+            />
+            <InputRightElement>
+              <Button
+                size="sm"
+                onClick={handleTogglePassword}
+                fontSize="sm"
+                colorScheme="blue"
+                variant="ghost">
+                {showPassword ? "Hide" : "Show"}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+          <FormErrorMessage>
+            <FormErrorIcon />
+            {error.password}
+          </FormErrorMessage>
+        </FormControl>
+        <Button
+          colorScheme="blue"
+          onClick={handleSubmit}
+          type="submit"
+          colorScheme="whatsapp"
+          width="100%">
+          Submit
+        </Button>
+      </VStack>
+    </form>
   );
 }

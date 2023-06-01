@@ -6,12 +6,17 @@ import {
   Spinner,
   Text,
   useBreakpointValue,
+  ButtonGroup,
 } from "@chakra-ui/react";
-import SignupModal from "./Modal";
 import { useQuery } from "react-query";
 import axiosFetch from "../configs/axiosConfig";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const MentorshipCard = () => {
+  const { role } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+
   const isLargeScreen = useBreakpointValue({ base: false, lg: true });
   const {
     data: mentorshipPlans,
@@ -22,6 +27,24 @@ const MentorshipCard = () => {
     const response = await axiosFetch().get("/courses");
     return response.data;
   });
+  const makepayment = async (plan) => {
+    try {
+      // Make a request to your backend endpoint that handles Paystack payment initiation
+      const response = await axiosFetch().post("/paystack", {
+        amount: 5000 * 100, // Payment amount
+        email: "example@example.com",
+        mentorship: { ...plan, user_id: 200 },
+      });
+
+      const { authorization_url, reference } = response.data;
+      console.log(authorization_url);
+      // Redirect the user to the Paystack payment page
+      window.location.href = authorization_url;
+    } catch (error) {
+      console.error("Error initiating payment:", error);
+      // Handle error
+    }
+  };
 
   return (
     <Box py={20}>
@@ -42,7 +65,7 @@ const MentorshipCard = () => {
             color="blue.500"
             size="xl"
           />
-        ) : mentorshipPlans.length ? (
+        ) : !error ? (
           mentorshipPlans.map((plan, index) => (
             <Box
               key={plan.course_id}
@@ -54,21 +77,41 @@ const MentorshipCard = () => {
               mb={isLargeScreen ? 0 : 10}
               bg="gray.900">
               <Heading as="h3" mb={4} color="white" fontSize="xl">
-                {plan.title}
+                ADAMCAPITALS DISCORD MENTORSHIP
               </Heading>
+              <Text fontWeight={"bold"} fontSize={"lg"} color="white" mb={4}>
+                {plan.plan}
+              </Text>
               <Text color="white" mb={4}>
                 {plan.description}
               </Text>
-              <Text color="white" mb={4}>
-                Price: {plan.price}
-              </Text>
-              <SignupModal />
+              <ButtonGroup
+                display="flex"
+                alignItems={"center"}
+                justifyContent={"space-between"}>
+                <Text color="white" mb={4}>
+                  Price: ${plan.price}
+                </Text>
+                {role == "student" ? (
+                  <Button
+                    onClick={() => makepayment(plan)}
+                    colorScheme="whatsapp">
+                    Buy
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => navigate("/account")}
+                    colorScheme="whatsapp">
+                    Buy
+                  </Button>
+                )}
+              </ButtonGroup>
             </Box>
           ))
         ) : (
           <Text color={"whiteAlpha.700"} fontSize={"xl"}>
             {" "}
-            No plan available!{" "}
+            No plan available!
           </Text>
         )}
       </Flex>

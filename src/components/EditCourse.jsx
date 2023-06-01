@@ -24,7 +24,7 @@ export default function EditCourse() {
   const { state } = location;
   const [course, setCourse] = useState(state);
   const [loading, setLoading] = useState(false);
-  const { course_id, description, price, plan } = course;
+  const { course_id, description, price, plan , channel , server } = course;
   const { token } = useSelector((state) => state.user);
   const [errors, setError] = useState({});
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ export default function EditCourse() {
       };
       const response = await axiosFetch().post(
         `/upadte-course/${course_id}`,
-        { description, price, plan },
+        { description, price, plan , server , channel },
         { headers }
       );
       const { status } = response;
@@ -83,7 +83,7 @@ export default function EditCourse() {
       boxShadow="lg">
       <form onSubmit={formSubmit} action="">
         <Text textAlign={"center"} fontWeight={"bold"} color="white">
-          EDIT COURSE
+          EDIT  PLAN
         </Text>
         <Flex direction="column">
           <FormControl id="courseTitle" mb="4">
@@ -134,6 +134,40 @@ export default function EditCourse() {
             <FormErrorMessage>
               <FormErrorIcon />
               {errors.price}
+            </FormErrorMessage>
+          </FormControl>
+           <FormControl id="coursePrice" isInvalid={errors.server} mb="4">
+            <FormLabel color="white">Sever ID</FormLabel>
+            <Input
+              value={server}
+              name="server"
+              onChange={handleInput}
+              color="white"
+              type="text"
+              required
+              placeholder="Enter Server ID"
+              isInvalid={errors.server}
+            />
+            <FormErrorMessage>
+              <FormErrorIcon />
+              {errors.server}
+            </FormErrorMessage>
+          </FormControl>
+           <FormControl id="coursePrice" isInvalid={errors.channel} mb="4">
+            <FormLabel color="white">Channel ID</FormLabel>
+            <Input
+              value={channel}
+              name="channel"
+              onChange={handleInput}
+              color="white"
+              type="price"
+              required
+              placeholder="Enter Server ID"
+              isInvalid={errors.server}
+            />
+            <FormErrorMessage>
+              <FormErrorIcon />
+              {errors.channel}
             </FormErrorMessage>
           </FormControl>
         </Flex>

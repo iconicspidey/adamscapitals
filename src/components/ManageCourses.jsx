@@ -18,16 +18,13 @@ const ManageCourses = () => {
   const mentorship = useSelector((state) => state.courses);
   const dispatch = useDispatch();
   const isLargeScreen = useBreakpointValue({ base: false, lg: true });
-  console.log(mentorship);
   useEffect(() => {
     (async () => {
       try {
         const response = await axiosFetch().get("/courses");
         const { data } = response;
         dispatch(setCourses(data));
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     })();
   }, []);
 
@@ -53,7 +50,7 @@ const ManageCourses = () => {
             mb={isLargeScreen ? 0 : 10}
             bg="gray.900">
             <Heading as="h3" mb={4} color="white" fontSize="xl">
-              {plan.title}
+              {plan.plan}
             </Heading>
             <Text color="white" mb={4}>
               {plan.description}

@@ -4,38 +4,15 @@ import AdminDashboard from "../pages/Admin";
 
 function AdminAuth({ auth }) {
   const location = useLocation();
-  const { logged, role } = auth;
+  const { role } = auth;
 
-  return (
-    <>
-      {logged ? (
-        role == "admin" ? (
-          <AdminDashboard />
-        ) : (
-          <Navigate to="/dashboard" state={{ from: location }} replace />
-        )
-      ) : (
-        <Navigate to="/account" state={{ from: location }} replace />
-      )}
-    </>
-  );
+  return role === "admin" ? <Outlet /> : <Navigate to="/" />;
 }
 function StudentAuth({ auth }) {
   const location = useLocation();
-  const { logged, role } = auth;
-  return (
-    <>
-      {logged ? (
-        role == "student" ? (
-          <Outlet />
-        ) : (
-          <Navigate to="/account" state={{ from: location }} replace />
-        )
-      ) : (
-        <Navigate to="/account" state={{ from: location }} replace />
-      )}
-    </>
-  );
+  const { role } = auth;
+
+  return role === "student" ? <Outlet /> : <Navigate to="/" />;
 }
 
 export { AdminAuth, StudentAuth };

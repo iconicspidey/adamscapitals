@@ -7,6 +7,7 @@ import {
 import { lazy, useEffect } from "react";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
+
 import Footer from "./components/Footer";
 import { ChakraProvider } from "@chakra-ui/react";
 import FormComponent from "./pages/Form";
@@ -26,32 +27,27 @@ import EditCourse from "./components/EditCourse";
 import AdminDashboard from "./pages/Admin";
 import { AdminAuth, StudentAuth } from "./auth/RequireAuth";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "./redux-slice/userSlice";
+import SignupModal from "./components/Modal";
 function App() {
-  const { role, logged } = useSelector((state) => state.user);
-
+  const { role } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: "localstorage" });
+  }, []);
   return (
     <ChakraProvider>
-      <Router>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/account" element={<FormComponent />}>
-            <Route path="/account" element={<Login />} />
-            <Route
-              path="/account/forget_password"
-              element={<ForgetPassword />}
-            />
-          </Route>
-          {/*  */}
+      {/* <Router> */}
+      <NavBar />
+      <Routes>
+        <Route element={<StudentAuth auth={{ role }} />}>
           <Route path="/dashboard" element={<StudentDashboard />}>
-            <Route path="" element={<Courses />}>
-              <Route path="/dashboard/password" element={<ChangePassword />} />
-              <Route path="/dashboard/profile" element={<StudentProfile />} />
-            </Route>
+            <Route path="" element={<Courses />} />
+            <Route path="password" element={<ChangePassword />} />
+            <Route path="profile" element={<StudentProfile />} />
           </Route>
-          {/*  */}
-          {/* <Route element={<AdminAuth auth={{ logged, role }} />}> */}
+        </Route>
+
+        <Route element={<AdminAuth auth={{ role }} />}>
           <Route path="/admin" element={<AdminDashboard />}>
             <Route path="" element={<AdminLinks />} />
             <Route path="student-table" element={<StudentTable />} />
@@ -60,12 +56,18 @@ function App() {
             <Route path="edit-course" element={<EditCourse />} />
             <Route path="change-password" element={<AdminPassword />} />
           </Route>
-          {/* </Route> */}
+        </Route>
 
-          <Route path="/*" element={<NotFound />} />
-        </Routes>
-        <Footer />
-      </Router>
+        <Route path="/account" element={<FormComponent />}>
+          <Route path="" element={<SignupModal />} />
+          <Route path="login" element={<Login />} />
+          <Route path="forget_password" element={<ForgetPassword />} />
+        </Route>
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <Footer />
+      {/* </Router> */}
     </ChakraProvider>
   );
 }

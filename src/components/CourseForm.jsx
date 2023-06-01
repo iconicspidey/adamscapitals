@@ -29,6 +29,8 @@ const CourseForm = () => {
     plan: "",
     price: "",
     description: "",
+    server: "",
+    channel: "",
   });
   const [errors, setError] = useState({});
   const handleChange = (event) => {
@@ -131,6 +133,38 @@ const CourseForm = () => {
             <FormErrorMessage>
               <FormErrorIcon />
               {errors.price}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl id="coursePrice" isInvalid={errors.server} mb="4">
+            <FormLabel color="white">Server ID</FormLabel>
+            <Input
+              color="white"
+              type="text"
+              required
+              placeholder="Enter Server ID"
+              name="server"
+              value={course.server}
+              onChange={handleChange}
+            />
+            <FormErrorMessage>
+              <FormErrorIcon />
+              {errors.server}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl id="coursePrice" isInvalid={errors.channel} mb="4">
+            <FormLabel color="white">Channel ID</FormLabel>
+            <Input
+              color="white"
+              type="text"
+              required
+              placeholder="Enter Channel ID"
+              name="channel"
+              value={course.channel}
+              onChange={handleChange}
+            />
+            <FormErrorMessage>
+              <FormErrorIcon />
+              {errors.channel}
             </FormErrorMessage>
           </FormControl>
         </Flex>
