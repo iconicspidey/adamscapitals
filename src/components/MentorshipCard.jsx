@@ -94,7 +94,7 @@ const MentorshipCard = () => {
                   flex="1"
                   color="white"
                   textAlign="left">
-                  Curriculum
+                  Course Curriculum
                 </Box>
                 <AccordionIcon as={ChevronDownIcon} color="white" boxSize={6} />
                 <ChevronDownIcon />

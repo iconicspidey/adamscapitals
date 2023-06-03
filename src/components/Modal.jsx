@@ -16,6 +16,7 @@ import axiosFetch from "../configs/axiosConfig";
 export default function SignupModal({ plan: mentorship }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [input, setInput] = useState({
     fullName: "",
     email: "",
@@ -30,6 +31,7 @@ export default function SignupModal({ plan: mentorship }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     // onClose();
+    setLoading(true);
 
     try {
       const { fullName: name, password, email } = input;
@@ -38,12 +40,15 @@ export default function SignupModal({ plan: mentorship }) {
         password,
         email,
       });
+
       navigate("/account/login");
     } catch (error) {
       const { data, status } = error.response;
       console.log(data, status);
 
       setError((prev) => ({ ...prev, ...data }));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -163,7 +168,8 @@ export default function SignupModal({ plan: mentorship }) {
           onClick={handleSubmit}
           type="submit"
           colorScheme="whatsapp"
-          width="100%">
+          width="100%"
+          isLoading={loading}>
           Submit
         </Button>
       </VStack>

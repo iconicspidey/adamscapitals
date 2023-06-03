@@ -63,7 +63,11 @@ const Navbar = () => {
             </Link>
           </Box>
           <Box as="li" display={`${!logged ? "block" : "none"}`} mx={4}>
-            <Link color="white" to="/account" as={NavLink}>
+            <Link
+              color="white"
+              nClick={handleToggleMenu}
+              to="/account"
+              as={NavLink}>
               Sign Up
             </Link>
           </Box>
