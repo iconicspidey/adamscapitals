@@ -14,6 +14,9 @@ import MentorshipCard from "../components/MentorshipCard";
 import TestimonialsSlider from "../components/TestimonialsSlider";
 
 const Home = () => {
+  const scroll = () => {
+    document.getElementById("start").scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <div>
       <Box
@@ -58,7 +61,8 @@ const Home = () => {
                   color="white"
                   bg="green.500"
                   size="lg"
-                  rounded="full">
+                  rounded="full"
+                  onClick={scroll}>
                   Get Started
                 </Button>
                 <Button
@@ -78,8 +82,11 @@ const Home = () => {
       {/*  */}
       <Box bg="gray.800" py={16}>
         <Box
+          display={"flex"}
+          justifyContent={"center"}
           maxW={{ base: "90%", md: "80%", lg: "70%", xl: "1200px" }}
-          mx="auto">
+          mx="auto"
+          id="start">
           <MentorshipCard />
         </Box>
         <TestimonialsSlider />

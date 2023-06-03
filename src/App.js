@@ -34,6 +34,7 @@ function App() {
   useEffect(() => {
     dispatch({ type: "localstorage" });
   }, []);
+  console.log(role)
   return (
     <ChakraProvider>
       {/* <Router> */}

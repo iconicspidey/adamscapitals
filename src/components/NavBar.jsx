@@ -13,8 +13,8 @@ const Navbar = () => {
   const handleToggleMenu = () => setShowMenu(!showMenu);
   const logout = () => {
     handleToggleMenu();
-    dispatch({ type: "logout" });
     navigate("/");
+    dispatch({ type: "logout" });
   };
   return (
     <Flex
@@ -56,11 +56,7 @@ const Navbar = () => {
               Home
             </Link>
           </Box>
-          <Box as="li" mx={4}>
-            <Link onClick={handleToggleMenu} to="/" as={NavLink}>
-              Courses
-            </Link>
-          </Box>
+
           <Box as="li" display={`${!logged ? "block" : "none"}`} mx={4}>
             <Link onClick={handleToggleMenu} to="/account/login" as={NavLink}>
               Sign In

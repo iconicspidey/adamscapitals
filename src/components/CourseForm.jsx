@@ -175,7 +175,7 @@ const CourseForm = () => {
             leftIcon={<ArrowBackIcon />}>
             Back
           </Button>
-          <Button isLoading={loading} type="submit" colorScheme="whatsapp">
+          <Button isDisabled isLoading={loading} type="submit" colorScheme="whatsapp">
             Submit
           </Button>
         </ButtonGroup>

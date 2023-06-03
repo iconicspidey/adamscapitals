@@ -16,8 +16,8 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase("logout", (state, actions) => {
-      state = {};
       localStorage.clear("token");
+      return {};
     });
     builder.addCase("localstorage", (state, actions) => {
       const user = JSON.parse(localStorage.getItem("token"));

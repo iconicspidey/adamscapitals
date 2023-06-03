@@ -40,8 +40,8 @@ const StudentTable = () => {
           <Tr>
             <Th>Name</Th>
             <Th>Email</Th>
-            <Th>Plan</Th>
-            <Th>Plan status</Th>
+            <Th>Status</Th>
+            <Th>Date join</Th>
             <Th>Actions</Th>
           </Tr>
         </Thead>
@@ -51,13 +51,17 @@ const StudentTable = () => {
               <Tr color="white" key={index}>
                 <Td>{student.full_name}</Td>
                 <Td>{student.email}</Td>
-                <Td>{student.plan}</Td>
                 <Td>
-                  {moment().diff(student.createdAt, "month") <= 1 ? (
+                  {student.payment_ref ? (
                     <Text color="lightgreen">Active</Text>
                   ) : (
-                    <Text color="red.400">Expired</Text>
+                    <Text color="red.400">Inactive</Text>
                   )}
+                </Td>
+                <Td>
+                  {student.payment_ref
+                    ? moment(student.createdAt).format("MMMM Do YYYY")
+                    : "Not join"}
                 </Td>
                 <Td>
                   <DeleteStudent
