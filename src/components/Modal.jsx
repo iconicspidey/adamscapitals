@@ -99,7 +99,7 @@ export default function SignupModal({ plan: mentorship }) {
         </FormControl>
         <FormControl id="email" isInvalid={error.email} width="100%">
           <FormLabel htmlFor="email" color="#fff">
-            Email Address
+            Email
           </FormLabel>
           <Input
             id="email"
@@ -107,7 +107,7 @@ export default function SignupModal({ plan: mentorship }) {
             backgroundColor="gray.700"
             color="gray.100"
             type="email"
-            placeholder="Emaail"
+            placeholder="email"
             value={input.email}
             name="email"
             onChange={formData}

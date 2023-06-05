@@ -54,7 +54,7 @@ function Courses() {
                     ADAMCAPITALS FX MENTORSHIP
                   </Heading>
                   <Text color="white" mb={4}>
-                    PRO COMMUNITY LIFFETIME{" "}
+                    PRO COMMUNITY LIFFETIME
                     <FaUserCheck
                       color="lightgreen"
                       size={"50px"}
