@@ -72,9 +72,7 @@ const MentorshipCard = () => {
           <Text color="white" mb={4}>
             <CheckIcon /> Daily Setups and signals
           </Text>
-          <Text color="white" mb={4}>
-            <CheckIcon /> Live lessons trading
-          </Text>
+
           <Text color="white" mb={4}>
             <CheckIcon /> Support with me 24/7
           </Text>
@@ -208,9 +206,7 @@ const MentorshipCard = () => {
           <Text color="white" mb={4}>
             <CheckIcon /> Daily Setups and signals
           </Text>
-          <Text color="white" mb={4}>
-            <CheckIcon /> Live lessons trading
-          </Text>
+
           <Text color="white" mb={4}>
             <CheckIcon /> Support with me 24/7
           </Text>
