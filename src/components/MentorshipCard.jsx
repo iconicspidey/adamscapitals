@@ -143,7 +143,7 @@ const MentorshipCard = () => {
                 $100
               </Text>
               <Text fontSize={"2rem"} fontWeight={"bold"}>
-                <CheckIcon fontSize={"sm"} color={"green.300"} /> $70
+                <CheckIcon fontSize={"sm"} color={"green.300"} /> $75
               </Text>
             </Box>
             <Text textAlign={"center"} size={"sm"}>
@@ -167,7 +167,7 @@ const MentorshipCard = () => {
             {role === "student" && (
               <Button
                 width={"100%"}
-                onClick={() => makepayment(70)}
+                onClick={() => makepayment(75)}
                 colorScheme="whatsapp">
                 Buy
               </Button>
