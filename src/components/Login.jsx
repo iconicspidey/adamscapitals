@@ -40,23 +40,16 @@ export default function Login() {
     };
     try {
       const response = await axiosFetch().post("/signin", userData);
-
-      if (response.status == 200) {
-        const { data } = response;
-        setLoading(false);
-        setError(() => {
-          return { state: false, email: null, password: null };
-        });
-        localStorage.setItem(
-          "token",
-          JSON.stringify({ ...data, logged: true })
-        );
-        dispatch(setUser({ ...data, logged: true }));
-        if (data.role === "admin") {
-          navigate("/admin", { replace: false });
-        } else {
-          navigate("/dashboard", { replace: false });
-        }
+      const { data } = response;
+      setError(() => {
+        return { state: false, email: null, password: null };
+      });
+      localStorage.setItem("token", JSON.stringify({ ...data, logged: true }));
+      dispatch(setUser({ ...data, logged: true }));
+      if (data.role === "admin") {
+        navigate("/admin", { replace: false });
+      } else {
+        navigate("/dashboard", { replace: false });
       }
     } catch (error) {
       const { data, status } = error.response;
@@ -69,7 +62,6 @@ export default function Login() {
             password: data.password,
           };
         });
-        setLoading(false);
       }
       if (status == 401) {
         setError((prev) => {
@@ -79,6 +71,8 @@ export default function Login() {
           };
         });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -89,7 +83,7 @@ export default function Login() {
       borderWidth="1px"
       borderRadius="lg"
       height="-moz-max-content">
-      <Heading as="h1" color="white" mb="6">
+      <Heading textAlign={"center"} as="h5" size={"lg"} color="white" mb="6">
         Login
       </Heading>
       <form onSubmit={handleSubmit}>
@@ -127,6 +121,7 @@ export default function Login() {
             type="submit"
             isLoading={isLoading}
             spinner={<Spinner size="sm" />}
+            width="100%"
             colorScheme="green">
             Login
           </Button>

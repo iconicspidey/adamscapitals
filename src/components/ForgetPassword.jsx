@@ -10,7 +10,7 @@ import {
   FormErrorMessage,
   ButtonGroup,
   FormErrorIcon,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";

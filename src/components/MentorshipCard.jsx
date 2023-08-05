@@ -22,16 +22,15 @@ const MentorshipCard = () => {
   const navigate = useNavigate();
 
   const isLargeScreen = useBreakpointValue({ base: false, lg: true });
-  const test = useBreakpointValue({});
 
-  console.log(test);
-  const makepayment = async (price) => {
+  const makepayment = async (price, whatsapp = null) => {
     try {
       // Make a request to your backend endpoint that handles Paystack payment initiation
       const response = await axiosFetch().post("/paystack", {
         amount: price * 750, // Payment amount
         email: email,
         user_id: user_id,
+        whatsapp: whatsapp,
       });
 
       const { authorization_url, reference } = response.data;
@@ -144,7 +143,7 @@ const MentorshipCard = () => {
                 $100
               </Text>
               <Text fontSize={"2rem"} fontWeight={"bold"}>
-                <CheckIcon fontSize={"sm"} color={"green.300"} /> $60
+                <CheckIcon fontSize={"sm"} color={"green.300"} /> $70
               </Text>
             </Box>
             <Text textAlign={"center"} size={"sm"}>
@@ -168,7 +167,7 @@ const MentorshipCard = () => {
             {role === "student" && (
               <Button
                 width={"100%"}
-                onClick={() => makepayment(60)}
+                onClick={() => makepayment(70)}
                 colorScheme="whatsapp">
                 Buy
               </Button>
@@ -302,7 +301,7 @@ const MentorshipCard = () => {
             {role === "student" && (
               <Button
                 width={"100%"}
-                onClick={() => makepayment(200)}
+                onClick={() => makepayment(200, "wa.link/yl0fxq")}
                 colorScheme="whatsapp">
                 Buy
               </Button>

@@ -164,7 +164,6 @@ export default function SignupModal({ plan: mentorship }) {
           </FormErrorMessage>
         </FormControl>
         <Button
-          colorScheme="blue"
           onClick={handleSubmit}
           type="submit"
           colorScheme="whatsapp"

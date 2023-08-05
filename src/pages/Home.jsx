@@ -8,7 +8,6 @@ import {
   ButtonGroup,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, ArrowDownIcon } from "@chakra-ui/icons";
-import { PaystackButton, usePaystackPayment } from "react-paystack";
 import logo from "../assets/logo.jpg";
 import MentorshipCard from "../components/MentorshipCard";
 import TestimonialsSlider from "../components/TestimonialsSlider";
@@ -52,10 +51,7 @@ const Home = () => {
                 Get expert mentorship and learn to trade the foreign exchange
                 market like a pro.
               </Text>
-              <ButtonGroup
-                _active={{
-                  color: "blue",
-                }}>
+              <ButtonGroup>
                 <Button
                   leftIcon={<ArrowDownIcon />}
                   color="white"

@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { lazy, useEffect } from "react";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
@@ -34,7 +29,6 @@ function App() {
   useEffect(() => {
     dispatch({ type: "localstorage" });
   }, []);
-  console.log(role)
   return (
     <ChakraProvider>
       {/* <Router> */}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Flex, IconButton, Image, Text, Link } from "@chakra-ui/react";
+import { Box, Flex, IconButton, Image, Link } from "@chakra-ui/react";
 import { AiOutlineMenu } from "react-icons/ai";
 import logo from "../assets/logo.jpg";
 import { Link as NavLink, useNavigate } from "react-router-dom";
@@ -26,7 +26,9 @@ const Navbar = () => {
       bg="gray.800"
       color="white">
       <Box>
-        <Image src={logo} alt="Logo" h={10} rounded={"3xl"} />
+        <Link onClick={handleToggleMenu} as={NavLink} to="/">
+          <Image src={logo} alt="Logo" h={10} rounded={"3xl"} />
+        </Link>
       </Box>
       <IconButton
         display={{ base: "block", md: "none" }}
@@ -42,7 +44,7 @@ const Navbar = () => {
         display={{ base: showMenu ? "block" : "none", md: "flex" }}
         width={{ base: "full", md: "auto" }}
         alignItems="center"
-        flexGrow={1}>
+        transition={"1m ease-in-out"}>
         <Flex
           as="ul"
           listStyleType="none"
@@ -65,7 +67,7 @@ const Navbar = () => {
           <Box as="li" display={`${!logged ? "block" : "none"}`} mx={4}>
             <Link
               color="white"
-              nClick={handleToggleMenu}
+              onClick={handleToggleMenu}
               to="/account"
               as={NavLink}>
               Sign Up

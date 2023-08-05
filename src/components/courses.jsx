@@ -6,8 +6,9 @@ import {
   Text,
   Spinner,
   Button,
+  Flex,
 } from "@chakra-ui/react";
-import { FaDiscord, FaUserCheck } from "react-icons/fa";
+import { FaDiscord, FaUserCheck, FaWhatsapp } from "react-icons/fa";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import axiosFetch from "./../configs/axiosConfig";
@@ -64,18 +65,32 @@ function Courses() {
                   <Text my={"10px"} color="white">
                     Click below to Join
                   </Text>
-
-                  <a
-                    href={`${plan.discord_link}`}
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    <IconButton
-                      width={"100%"}
-                      size={"md"}
-                      aria-label="discord"
-                      icon={<FaDiscord />}
-                    />
-                  </a>
+                  <Flex flexDir={"column"} gap={2}>
+                    <a
+                      href={`${plan.discord_link}`}
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      <IconButton
+                        width={"100%"}
+                        size={"md"}
+                        aria-label="discord"
+                        icon={<FaDiscord />}
+                      />
+                    </a>
+                    {plan.whatsapp_link && (
+                      <a
+                        href={`${plan.discord_link}`}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <IconButton
+                          width={"100%"}
+                          size={"md"}
+                          aria-label="discord"
+                          icon={<FaWhatsapp />}
+                        />
+                      </a>
+                    )}
+                  </Flex>
                 </Box>
               ))
             : null}
