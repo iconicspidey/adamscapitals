@@ -27,7 +27,7 @@ const MentorshipCard = () => {
     try {
       // Make a request to your backend endpoint that handles Paystack payment initiation
       const response = await axiosFetch().post("/paystack", {
-        amount: price * 750, // Payment amount
+        amount: price, // Payment amount
         email: email,
         user_id: user_id,
         whatsapp: whatsapp,
