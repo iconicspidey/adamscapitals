@@ -1,82 +1,44 @@
-import { useState } from "react";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
+import { Box, Heading, SimpleGrid, Image } from "@chakra-ui/react";
+import image_1 from "../assets/images/image_1.jpg";
+import image_2 from "../assets/images/image_2.jpg";
+import image_3 from "../assets/images/image_3.jpg";
+import image_4 from "../assets/images/image_4.jpg";
+import image_5 from "../assets/images/image_5.jpg";
+import image_6 from "../assets/images/image_6.jpg";
+import image_7 from "../assets/images/image_7.jpg";
+import image_8 from "../assets/images/image_8.jpg";
+import image_9 from "../assets/images/image_9.jpg";
 const TestimonialsSlider = () => {
-  const testimonials = [
-    {
-      name: "John Doe",
-      title: "Forex Trader",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ultrices tortor a dolor vulputate, et egestas augue viverra. Sed et lorem vel turpis mattis consequat.",
-    },
-    {
-      name: "Jane Smith",
-      title: "Investor",
-      text: "Nullam pellentesque felis sit amet lectus lobortis, in suscipit mauris tristique. In egestas libero vitae arcu iaculis maximus. Quisque quis massa ipsum. Vivamus nec risus et risus tristique ultrices ac eu erat.",
-    },
-    {
-      name: "Bob Johnson",
-      title: "Stock Trader",
-      text: "Phasellus euismod facilisis sem a ullamcorper. Sed volutpat nisl eu turpis pretium, in feugiat mi faucibus. Nullam eu ultricies sapien. Aliquam at sapien nunc. ",
-    },
+  const photos = [
+    image_1,
+    image_2,
+    image_3,
+    image_4,
+    image_5,
+    image_5,
+    image_6,
+    image_7,
+    image_8,
+    image_9,
   ];
 
-  const [activeTestimonialIndex, setActiveTestimonialIndex] = useState(0);
-
-  const handlePreviousClick = () => {
-    setActiveTestimonialIndex((prevIndex) =>
-      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
+  const PhotoGallery = () => {
+    return (
+      <SimpleGrid columns={[1, 2, 3]} spacing="4">
+        {photos.map((photo, index) => (
+          <Box key={index}>
+            <Image src={photo} alt={`Photo ${index + 1}`} />
+          </Box>
+        ))}
+      </SimpleGrid>
     );
   };
-
-  const handleNextClick = () => {
-    setActiveTestimonialIndex((prevIndex) =>
-      prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  const activeTestimonial = testimonials[activeTestimonialIndex];
-
   return (
-    <Box maxW="600px" mx="auto" px="4">
+    <Box maxW="800px" mx="auto" px="4">
       <Heading as="h3" color={"white"} textAlign="center" mb="6">
         What Our Customers Say
       </Heading>
-      <Flex
-        justify="space-between"
-        align="center"
-        borderWidth="1px"
-        borderRadius="md"
-        p="6">
-        <Box flex="1">
-          <Text fontSize="xl" color={"white"} fontWeight="bold" mb="2">
-            {activeTestimonial.name}
-          </Text>
-          <Text fontSize="lg" color={"white"} fontWeight="semibold" mb="2">
-            {activeTestimonial.title}
-          </Text>
-          <Text color={"white"} fontSize="md">
-            {activeTestimonial.text}
-          </Text>
-        </Box>
-        <Flex align="center">
-          <Box
-            as={FaChevronLeft}
-            size="30px"
-            cursor="pointer"
-            onClick={handlePreviousClick}
-            mr="2"
-            bg={"whiteAlpha.300"}
-          />
-          <Box
-            as={FaChevronRight}
-            size="30px"
-            cursor="pointer"
-            onClick={handleNextClick}
-            bg={"whiteAlpha.300"}
-          />
-        </Flex>
-      </Flex>
+      <PhotoGallery />
     </Box>
   );
 };
