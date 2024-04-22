@@ -24,7 +24,8 @@ const Navbar = () => {
       wrap="wrap"
       padding={4}
       bg="gray.800"
-      color="white">
+      color="white"
+      >
       <Box>
         <Link onClick={handleToggleMenu} as={NavLink} to="/">
           <Image src={logo} alt="Logo" h={10} rounded={"3xl"} />

@@ -34,8 +34,7 @@ function ForgetPassword() {
       // handle password reset email logic here
     }
     try {
-      const response = await axiosFetch().post("/forgot-password", { email });
-
+      await axiosFetch().get(`/forgot-password/${email}`);
       setError("");
       setSuccessMessage(`A password reset email has been sent to ${email}`);
 

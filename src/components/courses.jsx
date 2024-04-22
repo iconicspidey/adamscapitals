@@ -13,6 +13,8 @@ import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import axiosFetch from "./../configs/axiosConfig";
 import { useNavigate } from "react-router-dom";
+import PaymentList from "./PaymentsList";
+import moment from "moment";
 
 function Courses() {
   const navigate = useNavigate();
@@ -22,6 +24,27 @@ function Courses() {
     const { data } = response;
     return data;
   });
+  const timestamp = (timestamp) => {
+    const timeAgo = moment(timestamp).fromNow();
+    return `${timeAgo}`;
+  };
+  const cryptoPayments = async () => {
+    try {
+      const response = await axiosFetch().get(`/crypto-payments/${user_id}`);
+      return response.data; // Return data in case of success
+    } catch (error) {
+      throw error.response;
+    }
+  };
+  const {
+    data: cryptoData,
+    isError: cryptoIsErr,
+    error: cryptoErr,
+    isLoading: cryptoIsloadin,
+    isSuccess,
+    refetch,
+  } = useQuery("crypopayments", cryptoPayments);
+
   return (
     <Box>
       <Heading
@@ -34,8 +57,7 @@ function Courses() {
       </Heading>
       <Box>
         <Grid
-          templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
-          width={"100%"}
+          templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 30%)" }}
           gap={6}>
           {status == "success" && data.length
             ? data.map((plan) => (
@@ -100,18 +122,60 @@ function Courses() {
         ) : null}
         {status == "success" && !data.length ? (
           <Grid
-            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
-            width={"100%"}>
-            <Text textAlign="center" m={"auto"} color="white">
-              YOU HAVE NOT YET JOIN
+            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 30%)" }}>
+            <Box borderWidth="1px" borderRadius="lg" py="6" px="4">
+              <Text textAlign="center" my={"10px"} color="white">
+                YOU HAVE NOT YET JOIN
+              </Text>
               <Button
                 colorScheme="whatsapp"
                 width="100%"
                 onClick={() => navigate("/")}>
                 JOIN NOW!
               </Button>
-            </Text>
+            </Box>
           </Grid>
+        ) : null}
+        <Text textAlign={"center"} fontSize={"xl"} my={"20px"} color={"white"}>
+          Initiated Payment and Verification
+        </Text>
+        <Grid
+          templateColumns={{
+            base: "1fr",
+            md: "repeat(2, 48%)",
+            lg: "repeat(3, 32.90%)",
+          }}
+          gap={2}
+          overflow="hidden">
+          {isSuccess
+            ? cryptoData.map((card) => (
+                <PaymentList
+                  title="Verify Binance Payment"
+                  description="Please click the button below to confirm payment"
+                  time={timestamp(card.createdAt)}
+                  prepaidId={card.prepaid_id}
+                  key={card.prepaid_id}
+                  userId={346}
+                  id={card.id}
+                  whatsapp_url={card.whatsapp_url}
+                  discord_url={card.discord_url}
+                  price={card.price}
+                  plan={card.plan}
+                  refetch={refetch}
+                />
+              ))
+            : null}
+        </Grid>
+        {isSuccess ? (
+          cryptoData.length ? null : (
+            <Text textAlign={"center"} color={"whiteAlpha.400"}>
+              You have not initiated any Binance transaction.
+            </Text>
+          )
+        ) : null}
+
+        {cryptoIsloadin ? (
+          <Spinner display={"block"} m={"auto"} color="blue.500" size="xl" />
         ) : null}
       </Box>
     </Box>

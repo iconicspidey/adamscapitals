@@ -1,44 +1,109 @@
-import { Box, Heading, SimpleGrid, Image } from "@chakra-ui/react";
-import image_1 from "../assets/images/image_1.jpg";
-import image_2 from "../assets/images/image_2.jpg";
-import image_3 from "../assets/images/image_3.jpg";
-import image_4 from "../assets/images/image_4.jpg";
-import image_5 from "../assets/images/image_5.jpg";
-import image_6 from "../assets/images/image_6.jpg";
-import image_7 from "../assets/images/image_7.jpg";
-import image_8 from "../assets/images/image_8.jpg";
-import image_9 from "../assets/images/image_9.jpg";
-const TestimonialsSlider = () => {
-  const photos = [
-    image_1,
-    image_2,
-    image_3,
-    image_4,
-    image_5,
-    image_5,
-    image_6,
-    image_7,
-    image_8,
-    image_9,
-  ];
+import React from "react";
+import { Box, Text, Center, IconButton, Heading } from "@chakra-ui/react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { FaUserCircle } from "react-icons/fa";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-  const PhotoGallery = () => {
-    return (
-      <SimpleGrid columns={[1, 2, 3]} spacing="4">
-        {photos.map((photo, index) => (
-          <Box key={index}>
-            <Image src={photo} alt={`Photo ${index + 1}`} />
+const testimonials = [
+  {
+    id: 1,
+    name: "KIRU",
+    message:
+      "Adamcapitals YOU ARE THE MAN ,always giving sniper entries ,what I love about your signals is minimal sl and large tp always targeting 100pips  plus",
+  },
+  {
+    id: 2,
+    name: "Imann",
+    message:
+      "As a beginner in forex trading, this platform's educational resources and user-friendly interface have made the learning curve much smoother. I'm gaining confidence and profits!",
+  },
+  {
+    id: 3,
+    name: "MSK",
+    message:
+      "adamcapitals first day in your discord and I got 600$ profit Alhamdulilah keep it going brother",
+  },
+  {
+    id: 4,
+    name: "Luka Brazi",
+    message:
+      "I've tried multiple forex platforms, but the customer support I got at adamcaptials is exceptional. They guided me through setting up my trades and provided valuable market analysis. thank you soo much Adamcapitals",
+  },
+  {
+    id: 5,
+    name: "Captain",
+    message:
+      "The accuracy of their trading signals is astonishing! My portfolio has seen consistent growth since I started following their recommendations.",
+  },
+  // Add more testimonials here
+];
+
+const ArrowButton = ({ direction, onClick, position, right, left }) => {
+  const icon =
+    direction === "left" ? <ChevronLeftIcon /> : <ChevronRightIcon />;
+  return (
+    <IconButton
+      aria-label={`Arrow right`}
+      icon={icon}
+      size="lg"
+      color={"gray.500"}
+      backgroundColor={"transparent"}
+      border={"1px solid #fff"}
+      position={position}
+      top="50%" // Vertically center the button
+      transform="translateY(50%)"
+      zIndex={10000}
+      left={left}
+      right={right}
+      onClick={onClick}
+      _hover={{ backgroundColor: "gray.700" }}
+      display={{ base: "none", lg: "block" }}
+    />
+  );
+};
+const TestimonialsSlider = () => {
+  const settings = {
+    dots: true, // Apply custom class to dots
+    arraws: true,
+    prevArrow: <ArrowButton direction="left" position="absolute" left="10px" />,
+    nextArrow: (
+      <ArrowButton direction="right" position="absolute" right="10px" />
+    ),
+    infinite: true,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+  };
+
+  return (
+    <Box overflow={"hidden"} position={"relative"} py={8}>
+      <Heading color="gray.100" textAlign={"center"}>
+        Members Reviews
+      </Heading>
+      <Slider {...settings}>
+        {testimonials.map((testimony) => (
+          <Box key={testimony.id} p={6}>
+            <Center flexDirection="column" p={5} textAlign="center">
+              <IconButton
+                size={"lg"}
+                backgroundColor={"gray.900"}
+                color={"gray.100"}
+                borderRadius={"2xl"}
+                colorScheme="blue"
+                icon={<FaUserCircle />}
+              />
+              <Text color="gray.100" fontSize="lg" fontWeight="bold" mb={2}>
+                {testimony.name}
+              </Text>
+              <Text color="gray.100">{testimony.message}</Text>
+            </Center>
           </Box>
         ))}
-      </SimpleGrid>
-    );
-  };
-  return (
-    <Box maxW="800px" mx="auto" px="4">
-      <Heading as="h3" color={"white"} textAlign="center" mb="6">
-        What Our Customers Say
-      </Heading>
-      <PhotoGallery />
+      </Slider>
     </Box>
   );
 };

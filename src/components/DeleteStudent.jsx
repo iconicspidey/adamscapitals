@@ -20,7 +20,7 @@ import { WarningIcon } from "@chakra-ui/icons";
 export default function DeleteStudent({ props }) {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { id, name } = props;
+  const { id, name, fetchTable } = props;
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const comfirmDelete = async () => {
@@ -39,6 +39,7 @@ export default function DeleteStudent({ props }) {
           isClosable: true,
           description: `${name} has been remove`,
         });
+        fetchTable();
       }
     } catch (error) {
       setLoading(false);

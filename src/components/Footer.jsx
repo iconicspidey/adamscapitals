@@ -48,7 +48,7 @@ const Footer = () => {
             mt={{ base: 8, md: 0 }}>
             <IconButton
               as="a"
-              href="https://www.facebook.com/"
+              href=""
               aria-label="Facebook"
               icon={<Icon as={FaFacebook} />}
               variant="solid"
@@ -57,37 +57,21 @@ const Footer = () => {
             />
             <IconButton
               as="a"
-              href="https://www.facebook.com/"
+              href="https://www.instagram.com/adamcapitals/?igshid=MmIzYWVlNDQ5Yg%3D%3D"
               aria-label="facebook"
               icon={<Icon as={FaInstagram} />}
               variant="solid"
               colorScheme="pink"
+              target="_blank"
               size="md"
             />
             <IconButton
               as="a"
-              href="https://www.facebook.com/"
-              aria-label="youtube"
-              icon={<Icon as={FaYoutube} />}
-              variant="solid"
-              colorScheme="red"
-              size="md"
-            />
-            <IconButton
-              as="a"
-              href="https://www.facebook.com/"
-              aria-label="youtube"
-              icon={<Icon as={FaDiscord} />}
-              variant="solid"
-              colorScheme="blue"
-              size="md"
-            />
-            <IconButton
-              as="a"
-              href="https://www.facebook.com/"
+              href=""
               aria-label="mail"
               icon={<Icon as={FaEnvelope} />}
               variant="solid"
+              target="_blank"
               colorScheme="teal"
               size="md"
             />

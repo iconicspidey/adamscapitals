@@ -4,7 +4,6 @@ import {
   Heading,
   Text,
   useBreakpointValue,
-  ButtonGroup,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -12,25 +11,32 @@ import {
   AccordionIcon,
   Flex,
 } from "@chakra-ui/react";
-import { CheckIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { CheckIcon, ChevronDownIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import axiosFetch from "../configs/axiosConfig";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import { FaBitcoin, FaCreditCard, FaPlus, FaMinus } from "react-icons/fa";
+import { useState } from "react";
+import CurrencyFormatComponent from "./currencyFormat";
+import CryptoModal from "./CryptoModal";
 const MentorshipCard = () => {
   const { role, user_id, email, logged } = useSelector((state) => state.user);
   const navigate = useNavigate();
-
+  const [quantity, setQuantity] = useState(1);
   const isLargeScreen = useBreakpointValue({ base: false, lg: true });
 
   const makepayment = async (price, whatsapp = null) => {
+    if (!logged) return navigate("/account");
+    if (role !== "student") return navigate("/admin");
+
     try {
       // Make a request to your backend endpoint that handles Paystack payment initiation
       const response = await axiosFetch().post("/paystack", {
-        amount: price, // Payment amount
+        amount: price * quantity, // Payment amount
         email: email,
         user_id: user_id,
         whatsapp: whatsapp,
+        plan: quantity,
       });
 
       const { authorization_url, reference } = response.data;
@@ -41,7 +47,15 @@ const MentorshipCard = () => {
       // Handle error
     }
   };
+  const handleIncrement = () => {
+    setQuantity((prev) => prev + 1);
+  };
 
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      setQuantity((prev) => prev - 1);
+    }
+  };
   return (
     <Box py={20}>
       <Heading as="h2" color="white" textAlign="center" mb={10}>
@@ -66,7 +80,7 @@ const MentorshipCard = () => {
             <CheckIcon /> Smc full course
           </Text>
           <Text color="white" mb={4}>
-            <CheckIcon /> Weekly zoom calls
+            <CheckIcon /> Zoom calls
           </Text>
           <Text color="white" mb={4}>
             <CheckIcon /> Daily Setups and signals
@@ -80,6 +94,9 @@ const MentorshipCard = () => {
           </Text>
           <Text color="white" mb={4}>
             <CheckIcon /> Straight to the point contents
+          </Text>
+          <Text color="white" mb={4}>
+            <CheckIcon /> Short videos course
           </Text>
           <Accordion border={"none"} allowToggle>
             <AccordionItem>
@@ -140,47 +157,58 @@ const MentorshipCard = () => {
                 color="red.400"
                 textDecoration={"line-through"}
                 fontWeight={"bold"}>
-                $100
+                $180
               </Text>
               <Text fontSize={"2rem"} fontWeight={"bold"}>
-                <CheckIcon fontSize={"sm"} color={"green.300"} /> $75
+                <CheckIcon
+                  fontSize={"sm"}
+                  color={"green.300"}
+                  margin={"0 5px"}
+                />
+                <CurrencyFormatComponent value={125 * quantity} />
               </Text>
             </Box>
-            <Text textAlign={"center"} size={"sm"}>
-              One-time payment
-            </Text>
+            <Box>
+              <Text color="white" textAlign={"center"}>
+                Yearly Plan
+              </Text>
+
+              <Flex align="center" justifyContent={"center"}>
+                <Button
+                  size="sm"
+                  onClick={handleDecrement}
+                  colorScheme="whatsapp"
+                  leftIcon={<FaMinus />}></Button>
+                <Text mx={2}>{quantity}</Text>
+                <Button
+                  colorScheme="whatsapp"
+                  leftIcon={<FaPlus />}
+                  size="sm"
+                  onClick={handleIncrement}></Button>
+              </Flex>
+            </Box>
           </Box>
-          <ButtonGroup
+          <Box
             py={"10px"}
             display="flex"
             alignItems={"center"}
-            justifyContent={"space-between"}>
-            <Text color="white" mb={4}></Text>
-            {!logged && (
-              <Button
-                width={"100%"}
-                onClick={() => navigate("/account")}
-                colorScheme="whatsapp">
-                Buy
-              </Button>
-            )}
-            {role === "student" && (
-              <Button
-                width={"100%"}
-                onClick={() => makepayment(75)}
-                colorScheme="whatsapp">
-                Buy
-              </Button>
-            )}
-            {role === "admin" && (
-              <Button
-                width={"100%"}
-                onClick={() => navigate("/admin")}
-                colorScheme="whatsapp">
-                Buy
-              </Button>
-            )}
-          </ButtonGroup>
+            justifyContent={"space-between"}
+            flexDir={{ base: "column", md: "row" }}
+            gap={"10px"}>
+            <Button
+              width={"100%"}
+              onClick={() => makepayment(125)}
+              colorScheme="whatsapp"
+              leftIcon={<FaCreditCard />}>
+              Pay with Card
+            </Button>
+            <CryptoModal
+              price={125 * quantity}
+              user_id={user_id}
+              logged={logged}
+              role={role}
+            />
+          </Box>
         </Box>
         <Box
           borderWidth="1px"
@@ -200,7 +228,7 @@ const MentorshipCard = () => {
             <CheckIcon /> One to One zoom calls(1-2)Hours in a Week for 1 month
           </Text>
           <Text color="white" mb={4}>
-            <CheckIcon /> Weekly zoom calls
+            <CheckIcon /> Zoom calls
           </Text>
           <Text color="white" mb={4}>
             <CheckIcon /> Daily Setups and signals
@@ -214,6 +242,9 @@ const MentorshipCard = () => {
           </Text>
           <Text color="white" mb={4}>
             <CheckIcon /> Straight to the point contents
+          </Text>
+          <Text color="white" mb={4}>
+            <CheckIcon /> Short videos course
           </Text>
           <Accordion border={"none"} allowToggle>
             <AccordionItem>
@@ -274,47 +305,61 @@ const MentorshipCard = () => {
                 color="red.400"
                 textDecoration={"line-through"}
                 fontWeight={"bold"}>
-                $250
+                $450
               </Text>
               <Text fontSize={"2rem"} fontWeight={"bold"}>
-                <CheckIcon fontSize={"sm"} color={"green.300"} /> $200
+                <CheckIcon
+                  fontSize={"sm"}
+                  color={"green.300"}
+                  margin={"0 5px"}
+                />
+                <CurrencyFormatComponent value={350} />
               </Text>
             </Box>
-            <Text textAlign={"center"} size={"sm"}>
-              One-time payment
-            </Text>
+            <Box>
+              <Text color="white" textAlign={"center"}>
+                Yearly Plan
+              </Text>
+
+              <Flex align="center" justifyContent={"center"}>
+                <Button
+                  size="sm"
+                  onClick={handleDecrement}
+                  colorScheme="whatsapp"
+                  leftIcon={<FaMinus />}></Button>
+                <Text mx={2}>{quantity}</Text>
+                <Button
+                  colorScheme="whatsapp"
+                  leftIcon={<FaPlus />}
+                  size="sm"
+                  onClick={handleIncrement}></Button>
+              </Flex>
+            </Box>
           </Box>
-          <ButtonGroup
+          <Box
             py={"10px"}
             display="flex"
             alignItems={"center"}
-            justifyContent={"space-between"}>
-            <Text color="white" mb={4}></Text>
-            {!logged && (
-              <Button
-                width={"100%"}
-                onClick={() => navigate("/account")}
-                colorScheme="whatsapp">
-                Buy
-              </Button>
-            )}
-            {role === "student" && (
-              <Button
-                width={"100%"}
-                onClick={() => makepayment(200, "wa.link/yl0fxq")}
-                colorScheme="whatsapp">
-                Buy
-              </Button>
-            )}
-            {role === "admin" && (
-              <Button
-                width={"100%"}
-                onClick={() => navigate("/admin")}
-                colorScheme="whatsapp">
-                Buy
-              </Button>
-            )}
-          </ButtonGroup>
+            justifyContent={"space-between"}
+            flexDir={{ base: "column-reverse", md: "row-reverse" }}
+            gap={"10px"}>
+            <CryptoModal
+              price={350 * quantity}
+              whatsapp="https://wa.me/+2348102609099"
+              user_id={user_id}
+              logged={logged}
+              role={role}
+            />
+            <Button
+              width={"100%"}
+              onClick={() =>
+                makepayment(350 * quantity, "https://wa.me/+2348102609099")
+              }
+              colorScheme="whatsapp"
+              leftIcon={<FaCreditCard />}>
+              Pay with Card
+            </Button>
+          </Box>
         </Box>
       </Flex>
     </Box>

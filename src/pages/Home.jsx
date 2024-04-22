@@ -45,7 +45,7 @@ const Home = () => {
                 color="gray.100"
                 mb={4}
                 lineHeight="shorter">
-                Learn to Trade Forex
+                Learn to Trade 
               </Heading>
               <Text fontSize={{ base: "md", lg: "xl" }} color="gray.200" mb={8}>
                 Get expert mentorship and learn to trade the foreign exchange
@@ -67,7 +67,12 @@ const Home = () => {
                   rightIcon={<ArrowForwardIcon />}
                   size="lg"
                   rounded="full">
-                  Broker
+                  <a
+                    href="https://one.exness-track.com/a/1c4mv7jcf2?"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    Broker
+                  </a>
                 </Button>
               </ButtonGroup>
             </Box>
@@ -89,7 +94,7 @@ const Home = () => {
       </Box>
       {/*  */}
       <Box bg="gray.800" id="#about">
-        <Box textAlign="center" maxW="800px" mx="auto" py="8">
+        <Box textAlign="center" maxW="800px" mx="auto" py={6}>
           <Heading as="h2" color="white" size="2xl" mb="4">
             About Us
           </Heading>

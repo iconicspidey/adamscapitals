@@ -8,7 +8,9 @@ import {
   InputGroup,
   InputRightElement,
   VStack,
+  IconButton,
 } from "@chakra-ui/react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosFetch from "../configs/axiosConfig";
@@ -35,7 +37,7 @@ export default function SignupModal({ plan: mentorship }) {
 
     try {
       const { fullName: name, password, email } = input;
-      const response = await axiosFetch().post("/signup", {
+      await axiosFetch().post("/signup", {
         name,
         password,
         email,
@@ -79,7 +81,7 @@ export default function SignupModal({ plan: mentorship }) {
             isRequired
             backgroundColor="gray.700"
             color="gray.100"
-            placeholder="Names"
+            placeholder="Name"
             type="text"
             value={input.fullName}
             name="fullName"
@@ -154,7 +156,11 @@ export default function SignupModal({ plan: mentorship }) {
                 fontSize="sm"
                 colorScheme="blue"
                 variant="ghost">
-                {showPassword ? "Hide" : "Show"}
+                {!showPassword ? (
+                  <IconButton size={"sm"} icon={<FaEye />} />
+                ) : (
+                  <IconButton size={"sm"} icon={<FaEyeSlash />} />
+                )}
               </Button>
             </InputRightElement>
           </InputGroup>
