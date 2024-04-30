@@ -19,8 +19,11 @@ import { FaBitcoin, FaCreditCard, FaPlus, FaMinus } from "react-icons/fa";
 import { useState } from "react";
 import CurrencyFormatComponent from "./currencyFormat";
 import CryptoModal from "./CryptoModal";
+import FlashSale from "./FlashSale";
+
 const MentorshipCard = () => {
   const { role, user_id, email, logged } = useSelector((state) => state.user);
+  const { status } = useSelector((state) => state.sale);
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const isLargeScreen = useBreakpointValue({ base: false, lg: true });
@@ -61,6 +64,12 @@ const MentorshipCard = () => {
       <Heading as="h2" color="white" textAlign="center" mb={10}>
         What We Offer
       </Heading>
+      {status ? (
+        <FlashSale
+          endTime={new Date("2024-05-01T00:00:00")}
+          discountPercentage={30}
+        />
+      ) : null}
       <Flex
         justify="center"
         flexWrap={isLargeScreen ? "nowrap" : "wrap"}
@@ -157,7 +166,7 @@ const MentorshipCard = () => {
                 color="red.400"
                 textDecoration={"line-through"}
                 fontWeight={"bold"}>
-                $180
+                {status ? "$120" : "$180"}
               </Text>
               <Text fontSize={"2rem"} fontWeight={"bold"}>
                 <CheckIcon
@@ -165,7 +174,9 @@ const MentorshipCard = () => {
                   color={"green.300"}
                   margin={"0 5px"}
                 />
-                <CurrencyFormatComponent value={125 * quantity} />
+                <CurrencyFormatComponent
+                  value={status ? 70 * quantity : 125 * quantity}
+                />
               </Text>
             </Box>
             <Box>
@@ -197,13 +208,13 @@ const MentorshipCard = () => {
             gap={"10px"}>
             <Button
               width={"100%"}
-              onClick={() => makepayment(125)}
+              onClick={() => makepayment(status ? 70 : 125)}
               colorScheme="whatsapp"
               leftIcon={<FaCreditCard />}>
               Pay with Card
             </Button>
             <CryptoModal
-              price={125 * quantity}
+              price={status ? 70 * quantity : 125 * quantity}
               user_id={user_id}
               logged={logged}
               role={role}
@@ -313,7 +324,7 @@ const MentorshipCard = () => {
                   color={"green.300"}
                   margin={"0 5px"}
                 />
-                <CurrencyFormatComponent value={350} />
+                <CurrencyFormatComponent value={350 * quantity} />
               </Text>
             </Box>
             <Box>

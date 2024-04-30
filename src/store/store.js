@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import userSlice from "../redux-slice/userSlice";
 import coursesSlice from "../redux-slice/coursesSlice";
 import studentsSlice from "../redux-slice/studentsSlice";
+import flashSaleslice from "../redux-slice/flashSaleslice";
 const persistConfig = {
   key: "root",
   storage,
@@ -14,6 +15,7 @@ const store = configureStore({
     user: persist,
     courses: coursesSlice,
     students: studentsSlice,
+    sale: flashSaleslice,
   },
 });
 export const persistor = persistStore(store);
