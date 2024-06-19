@@ -161,6 +161,7 @@ const MentorshipCard = () => {
               display={"flex"}
               justifyContent={"space-evenly"}
               alignItems={"center"}>
+{/*               FIRST COURSE */}
               <Text
                 fontSize={"16px"}
                 color="red.400"
@@ -208,12 +209,14 @@ const MentorshipCard = () => {
             gap={"10px"}>
             <Button
               width={"100%"}
+{/*               COURSE 1 - PAYSTACK */}
               onClick={() => makepayment(status ? 70 : 125)}
               colorScheme="whatsapp"
               leftIcon={<FaCreditCard />}>
               Pay with Card
             </Button>
             <CryptoModal
+{/*               COURSE 1 - BINANCE */}
               price={status ? 70 * quantity : 125 * quantity}
               user_id={user_id}
               logged={logged}
@@ -324,6 +327,7 @@ const MentorshipCard = () => {
                   color={"green.300"}
                   margin={"0 5px"}
                 />
+{/*                 COURSE 2  PRICE*/}
                 <CurrencyFormatComponent value={350 * quantity} />
               </Text>
             </Box>
@@ -355,6 +359,7 @@ const MentorshipCard = () => {
             flexDir={{ base: "column-reverse", md: "row-reverse" }}
             gap={"10px"}>
             <CryptoModal
+{/*               COURSE 2 - CRYPTO */}
               price={350 * quantity}
               whatsapp="https://wa.me/+2348102609099"
               user_id={user_id}
@@ -363,6 +368,7 @@ const MentorshipCard = () => {
             />
             <Button
               width={"100%"}
+{/*               COURSE 2 - PAYSTACK*/}
               onClick={() =>
                 makepayment(350 * quantity, "https://wa.me/+2348102609099")
               }
