@@ -20,22 +20,25 @@ import { useState } from "react";
 import CurrencyFormatComponent from "./currencyFormat";
 import CryptoModal from "./CryptoModal";
 import FlashSale from "./FlashSale";
+import DiscountInput from "./extra/DiscountInput";
 
 const MentorshipCard = () => {
   const { role, user_id, email, logged } = useSelector((state) => state.user);
   const { status } = useSelector((state) => state.sale);
+  const data = useSelector((state) => state.courses);
+  const [toOneMentorship] = data.filter(({ type }) => type == "one-to-one");
+  const [toManyMentorship] = data.filter(({ type }) => type == "one-to-many");
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const isLargeScreen = useBreakpointValue({ base: false, lg: true });
-
-  const makepayment = async (price, whatsapp = null) => {
+  const makepayment = async (amount, whatsapp = null) => {
     if (!logged) return navigate("/account");
     if (role !== "student") return navigate("/admin");
 
     try {
       // Make a request to your backend endpoint that handles Paystack payment initiation
       const response = await axiosFetch().post("/paystack", {
-        amount: price * quantity, // Payment amount
+        amount: amount * quantity, // Payment amount
         email: email,
         user_id: user_id,
         whatsapp: whatsapp,
@@ -73,7 +76,8 @@ const MentorshipCard = () => {
       <Flex
         justify="center"
         flexWrap={isLargeScreen ? "nowrap" : "wrap"}
-        gap={isLargeScreen ? "10px" : "20px"}>
+        gap={isLargeScreen ? "10px" : "20px"}
+      >
         <Box
           borderWidth="1px"
           borderRadius="lg"
@@ -81,7 +85,8 @@ const MentorshipCard = () => {
           p={6}
           flex={isLargeScreen ? "1" : "0 0 calc(100% - 20px)"}
           mb={isLargeScreen ? 0 : 10}
-          bg="gray.900">
+          bg="gray.900"
+        >
           <Heading as="h3" mb={4} color="white" fontSize="xl">
             DISCORD MENTORSHIP
           </Heading>
@@ -117,7 +122,8 @@ const MentorshipCard = () => {
                     textTransform={"uppercase"}
                     flex="1"
                     color="white"
-                    textAlign="left">
+                    textAlign="left"
+                  >
                     Course Curriculum
                   </Box>
                   <AccordionIcon
@@ -160,13 +166,15 @@ const MentorshipCard = () => {
             <Box
               display={"flex"}
               justifyContent={"space-evenly"}
-              alignItems={"center"}>
+              alignItems={"center"}
+            >
               <Text
                 fontSize={"16px"}
                 color="red.400"
                 textDecoration={"line-through"}
-                fontWeight={"bold"}>
-                {status ? "$120" : "$180"}
+                fontWeight={"bold"}
+              >
+                ${toManyMentorship.strike_price}
               </Text>
               <Text fontSize={"2rem"} fontWeight={"bold"}>
                 <CheckIcon
@@ -175,7 +183,7 @@ const MentorshipCard = () => {
                   margin={"0 5px"}
                 />
                 <CurrencyFormatComponent
-                  value={status ? 70 * quantity : 125 * quantity}
+                  value={toManyMentorship.price * quantity}
                 />
               </Text>
             </Box>
@@ -189,14 +197,20 @@ const MentorshipCard = () => {
                   size="sm"
                   onClick={handleDecrement}
                   colorScheme="whatsapp"
-                  leftIcon={<FaMinus />}></Button>
+                  leftIcon={<FaMinus />}
+                ></Button>
                 <Text mx={2}>{quantity}</Text>
                 <Button
                   colorScheme="whatsapp"
                   leftIcon={<FaPlus />}
                   size="sm"
-                  onClick={handleIncrement}></Button>
+                  onClick={handleIncrement}
+                ></Button>
               </Flex>
+              <DiscountInput
+                type={toManyMentorship.type}
+                id={toManyMentorship.id}
+              />
             </Box>
           </Box>
           <Box
@@ -205,22 +219,25 @@ const MentorshipCard = () => {
             alignItems={"center"}
             justifyContent={"space-between"}
             flexDir={{ base: "column", md: "row" }}
-            gap={"10px"}>
+            gap={"10px"}
+          >
             <Button
               width={"100%"}
-              onClick={() => makepayment(status ? 70 : 125)}
+              onClick={() => makepayment(toManyMentorship.price)}
               colorScheme="whatsapp"
-              leftIcon={<FaCreditCard />}>
+              leftIcon={<FaCreditCard />}
+            >
               Pay with Card
             </Button>
             <CryptoModal
-              price={status ? 70 * quantity : 125 * quantity}
+              price={toManyMentorship.price * quantity}
               user_id={user_id}
               logged={logged}
               role={role}
             />
           </Box>
         </Box>
+        {/*  */}
         <Box
           borderWidth="1px"
           borderRadius="lg"
@@ -228,7 +245,8 @@ const MentorshipCard = () => {
           p={6}
           flex={isLargeScreen ? "1" : "0 0 calc(100% - 20px)"}
           mb={isLargeScreen ? 0 : 10}
-          bg="gray.900">
+          bg="gray.900"
+        >
           <Heading as="h3" mb={4} color="white" fontSize="xl">
             DISCORD MENTORSHIP + One To One
           </Heading>
@@ -267,7 +285,8 @@ const MentorshipCard = () => {
                     textTransform={"uppercase"}
                     flex="1"
                     color="white"
-                    textAlign="left">
+                    textAlign="left"
+                  >
                     Course Curriculum
                   </Box>
                   <AccordionIcon
@@ -310,13 +329,15 @@ const MentorshipCard = () => {
             <Box
               display={"flex"}
               justifyContent={"space-evenly"}
-              alignItems={"center"}>
+              alignItems={"center"}
+            >
               <Text
                 fontSize={"16px"}
                 color="red.400"
                 textDecoration={"line-through"}
-                fontWeight={"bold"}>
-                $450
+                fontWeight={"bold"}
+              >
+                ${toOneMentorship.strike_price}
               </Text>
               <Text fontSize={"2rem"} fontWeight={"bold"}>
                 <CheckIcon
@@ -324,7 +345,9 @@ const MentorshipCard = () => {
                   color={"green.300"}
                   margin={"0 5px"}
                 />
-                <CurrencyFormatComponent value={350 * quantity} />
+                <CurrencyFormatComponent
+                  value={toOneMentorship.price * quantity}
+                />
               </Text>
             </Box>
             <Box>
@@ -337,14 +360,20 @@ const MentorshipCard = () => {
                   size="sm"
                   onClick={handleDecrement}
                   colorScheme="whatsapp"
-                  leftIcon={<FaMinus />}></Button>
+                  leftIcon={<FaMinus />}
+                ></Button>
                 <Text mx={2}>{quantity}</Text>
                 <Button
                   colorScheme="whatsapp"
                   leftIcon={<FaPlus />}
                   size="sm"
-                  onClick={handleIncrement}></Button>
+                  onClick={handleIncrement}
+                ></Button>
               </Flex>
+              <DiscountInput
+                id={toOneMentorship.id}
+                type={toOneMentorship.price}
+              />
             </Box>
           </Box>
           <Box
@@ -353,9 +382,10 @@ const MentorshipCard = () => {
             alignItems={"center"}
             justifyContent={"space-between"}
             flexDir={{ base: "column-reverse", md: "row-reverse" }}
-            gap={"10px"}>
+            gap={"10px"}
+          >
             <CryptoModal
-              price={350 * quantity}
+              price={toOneMentorship.price * quantity}
               whatsapp="https://wa.me/+2348102609099"
               user_id={user_id}
               logged={logged}
@@ -364,10 +394,14 @@ const MentorshipCard = () => {
             <Button
               width={"100%"}
               onClick={() =>
-                makepayment(350 * quantity, "https://wa.me/+2348102609099")
+                makepayment(
+                  toOneMentorship.price * quantity,
+                  "https://wa.me/+2348102609099"
+                )
               }
               colorScheme="whatsapp"
-              leftIcon={<FaCreditCard />}>
+              leftIcon={<FaCreditCard />}
+            >
               Pay with Card
             </Button>
           </Box>

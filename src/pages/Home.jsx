@@ -6,13 +6,20 @@ import {
   Heading,
   Text,
   ButtonGroup,
+  Spinner,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, ArrowDownIcon } from "@chakra-ui/icons";
 import logo from "../assets/logo.jpg";
 import MentorshipCard from "../components/MentorshipCard";
 import TestimonialsSlider from "../components/TestimonialsSlider";
+import useFetchCoupons from "../utils/mentorship";
+import { useDispatch, useSelector } from "react-redux";
+import { getMentorship } from "../redux-slice/coursesSlice";
 
 const Home = () => {
+  const courses = useSelector((state) => state.courses);
+  const { data, isLoading, error, isFetching, isSuccess, isFetched } =
+    useFetchCoupons();
   const scroll = () => {
     document.getElementById("start").scrollIntoView({ behavior: "smooth" });
   };
@@ -22,30 +29,35 @@ const Home = () => {
         bgImage={`url(${logo})`}
         bgPosition="center"
         bgSize="cover"
-        h={{ base: "400px", md: "500px", lg: "600px" }}>
+        h={{ base: "400px", md: "500px", lg: "600px" }}
+      >
         <Box
           backgroundColor="rgba(0,0,0,.7)"
           h={{ base: "400px", md: "500px", lg: "600px" }}
           px={{ base: 4, lg: 20 }}
-          py={{ base: 12, lg: 20 }}>
+          py={{ base: 12, lg: 20 }}
+        >
           <Flex
             direction={{ base: "column", lg: "row" }}
             justify={{ base: "center", lg: "space-between" }}
             align={{ base: "center", lg: "flex-start" }}
             maxW={{ base: "full", lg: "1200px" }}
-            mx="auto">
+            mx="auto"
+          >
             <Box
               flex="1"
               textAlign={{ base: "center", lg: "left" }}
-              mb={{ base: 8, lg: 0 }}>
+              mb={{ base: 8, lg: 0 }}
+            >
               <Heading
                 as="h1"
                 fontSize={{ base: "3xl", lg: "5xl" }}
                 fontWeight="bold"
                 color="gray.100"
                 mb={4}
-                lineHeight="shorter">
-                Learn to Trade 
+                lineHeight="shorter"
+              >
+                Learn to Trade
               </Heading>
               <Text fontSize={{ base: "md", lg: "xl" }} color="gray.200" mb={8}>
                 Get expert mentorship and learn to trade the foreign exchange
@@ -58,7 +70,8 @@ const Home = () => {
                   bg="green.500"
                   size="lg"
                   rounded="full"
-                  onClick={scroll}>
+                  onClick={scroll}
+                >
                   Get Started
                 </Button>
                 <Button
@@ -66,11 +79,13 @@ const Home = () => {
                   bg="red.500"
                   rightIcon={<ArrowForwardIcon />}
                   size="lg"
-                  rounded="full">
+                  rounded="full"
+                >
                   <a
                     href="https://one.exness-track.com/a/1c4mv7jcf2?"
                     target="_blank"
-                    rel="noopener noreferrer">
+                    rel="noopener noreferrer"
+                  >
                     Broker
                   </a>
                 </Button>
@@ -87,8 +102,19 @@ const Home = () => {
           justifyContent={"center"}
           maxW={{ base: "90%", md: "80%", lg: "70%", xl: "1200px" }}
           mx="auto"
-          id="start">
-          <MentorshipCard />
+          id="start"
+        >
+          {isFetching ? (
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
+          ) : isSuccess ? (
+            <MentorshipCard data={courses} />
+          ) : null}
         </Box>
         <TestimonialsSlider />
       </Box>

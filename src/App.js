@@ -23,6 +23,7 @@ import AdminDashboard from "./pages/Admin";
 import { AdminAuth, StudentAuth } from "./auth/RequireAuth";
 import { useDispatch, useSelector } from "react-redux";
 import SignupModal from "./components/Modal";
+import Coupon from "./components/extra/Coupon";
 function App() {
   const { role } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ function App() {
             <Route path="student-table" element={<StudentTable />} />
             <Route path="course-form" element={<CourseForm />} />
             <Route path="manage-courses" element={<ManageCourses />} />
+            <Route path="coupon" element={<Coupon />} />
             <Route path="edit-course" element={<EditCourse />} />
             <Route path="change-password" element={<AdminPassword />} />
           </Route>

@@ -4,64 +4,59 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Textarea,
   Button,
   FormErrorIcon,
   FormErrorMessage,
   Text,
   ButtonGroup,
+  useToast,
 } from "@chakra-ui/react";
 
 import { WarningTwoIcon } from "@chakra-ui/icons";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useLocation, useNavigate, Link, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axiosFetch from "../configs/axiosConfig";
-import { useDispatch, useSelector } from "react-redux";
 
 export default function EditCourse() {
   const location = useLocation();
   const navigate = useNavigate();
+  const toast = useToast();
+  useEffect(() => {
+    if (!location.state) {
+      navigate("/");
+    }
+  }, [location, navigate]);
+
   const { state } = location;
-  const [course, setCourse] = useState(state);
-  const [loading, setLoading] = useState(false);
-  const { course_id, description, price, plan, server } = course;
-  const { token } = useSelector((state) => state.user);
+  const [course, setCourse] = useState({
+    salePrice: state ? state.price : "",
+    originalPrice: state ? state.strike_price : "",
+  });
+
   const [errors, setError] = useState({});
-  const dispatch = useDispatch();
-  const formSubmit = async (event) => {
+  const [isLoading, setLoading] = useState(false);
+  const updateMentorship = async (event) => {
     event.preventDefault();
     setLoading(true);
     try {
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-      const response = await axiosFetch().post(
-        `/upadte-course/${course_id}`,
-        { description, price, plan, server },
-        { headers }
+      const response = await axiosFetch().patch(
+        `/mentorship/${location.state.id}`,
+        course
       );
-      const { status } = response;
-      if (status == 200) {
-        setLoading(false);
-        navigate("/admin/manage-courses", { replace: true });
-      }
+      toast({
+        title: "Price Updated.",
+        description: "The price has been successfully updated.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+      // const path = location.pathname;
+      navigate("/admin");
     } catch (error) {
-      const response = error.response;
-
-      const { status, data } = response;
-      if (status == 401) {
-        dispatch({ type: "logout" });
-        navigate("/", { replace: true });
-      }
-      if (status == 400) {
-        setError(data);
-      }
+      setError(error.response.data);
+    } finally {
       setLoading(false);
     }
-  };
-  const cancel = () => {
-    navigate("/admin/manage-courses", { replace: true });
   };
   const handleInput = (input) => {
     const { name, value } = input.target;
@@ -80,92 +75,63 @@ export default function EditCourse() {
       p="6"
       borderWidth="1px"
       borderRadius="lg"
-      boxShadow="lg">
-      <form onSubmit={formSubmit} action="">
+      boxShadow="lg"
+    >
+      <form onSubmit={updateMentorship} action="">
         <Text textAlign={"center"} fontWeight={"bold"} color="white">
-          EDIT PLAN
+          Pricing Settings
         </Text>
         <Flex direction="column">
-          <FormControl id="courseTitle" mb="4">
-            <FormLabel color="white">Plan</FormLabel>
+          <FormControl
+            id="courseTitle"
+            mb="4"
+            isInvalid={errors?.originalPrice}
+          >
+            <FormLabel color="white">Original Price</FormLabel>
             <Input
-              name="plan"
+              name="originalPrice"
               onChange={handleInput}
-              color="white"
-              value={plan}
-              placeholder="Enter course title"
-              isInvalid={errors.plan}
+              textDecoration={"line-through"}
+              color="red.400"
+              value={course.originalPrice}
+              placeholder="original price"
+              _placeholder={{ color: "red.400" }}
             />
             <FormErrorMessage>
               <FormErrorIcon />
-              {errors.plan}
+              {errors?.originalPrice}
             </FormErrorMessage>
           </FormControl>
-
-          <FormControl id="courseDescription" mb="4">
-            <FormLabel color="white">Course Description</FormLabel>
-            <Textarea
-              value={description}
-              onChange={handleInput}
-              name="description"
-              required
-              color="white"
-              placeholder="Enter course description"
-              isInvalid={errors.description}
-            />
-            <FormErrorMessage>
-              <FormErrorIcon />
-              {errors.description}
-            </FormErrorMessage>
-          </FormControl>
-
-          <FormControl id="coursePrice" mb="4">
-            <FormLabel color="white">Course Price</FormLabel>
+          <FormControl id="courseTitle" mb="4" isInvalid={errors.salePrice}>
+            <FormLabel color="white">Sale Price</FormLabel>
             <Input
-              value={price}
-              name="price"
+              name="salePrice"
               onChange={handleInput}
               color="white"
-              type="number"
-              required
-              placeholder="Enter course price"
-              isInvalid={errors.price}
+              value={course.salePrice}
+              placeholder="sale price"
             />
             <FormErrorMessage>
               <FormErrorIcon />
-              {errors.price}
-            </FormErrorMessage>
-          </FormControl>
-          <FormControl id="coursePrice" isInvalid={errors.server} mb="4">
-            <FormLabel color="white">Sever ID</FormLabel>
-            <Input
-              value={server}
-              name="server"
-              onChange={handleInput}
-              color="white"
-              type="text"
-              required
-              placeholder="Enter Server ID"
-              isInvalid={errors.server}
-            />
-            <FormErrorMessage>
-              <FormErrorIcon />
-              {errors.server}
+              {errors?.salePrice}
             </FormErrorMessage>
           </FormControl>
         </Flex>
         <ButtonGroup display="flex" justifyContent={"space-between"}>
           <Button
-            onClick={() => cancel()}
+            as={Link}
+            to={"../"}
             leftIcon={<WarningTwoIcon />}
-            colorScheme="yellow">
+            colorScheme="yellow"
+          >
             Cancel
           </Button>
           <Button
-            isLoading={loading}
             loadingText="Submitting"
             type="submit"
-            colorScheme="whatsapp">
+            colorScheme="whatsapp"
+            isLoading={isLoading}
+          >
             Submit
           </Button>
         </ButtonGroup>

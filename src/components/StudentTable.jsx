@@ -64,7 +64,7 @@ const StudentTable = () => {
             <Th>Status</Th>
             <Th>Plan</Th>
             <Th>Date join</Th>
-            <Th>Actions</Th>
+            {/* <Th>Actions</Th> */}
           </Tr>
         </Thead>
         <Tbody fontSize={"sm"}>
@@ -98,7 +98,7 @@ const StudentTable = () => {
                       ? moment(student.createdAt).format("DD/MM/YYYY")
                       : "Not join"}
                   </Td>
-                  <Td>
+                  {/* <Td>
                     <DeleteStudent
                       props={{
                         id: student.user_id,
@@ -106,7 +106,7 @@ const StudentTable = () => {
                         fetchTable: refetch,
                       }}
                     />
-                  </Td>
+                  </Td> */}
                 </Tr>
               )
             )}

@@ -3,6 +3,7 @@ import { Box, Button, Heading, Text } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { stopSale } from "../redux-slice/flashSaleslice";
 import { motion } from "framer-motion";
+import DiscountCode from "./Discount";
 const FlashSale = ({ discountPercentage }) => {
   const dispatch = useDispatch();
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -39,16 +40,20 @@ const FlashSale = ({ discountPercentage }) => {
       {/* <Marquee direction="right" pauseOnHover> */}
 
       <Heading as="h3" size="md" color={"white"} mb="2">
-        Flash Sale!
+        Discount Delight!
       </Heading>
       <Text mb="4" color={"white"}>
-        Hurry up! {discountPercentage}% off for the next{" "}
-        {timeLeft.days > 0 ? `${timeLeft.days}d ` : ""}
-        {timeLeft.hours > 0 ? `${timeLeft.hours}h ` : ""}
-        {timeLeft.minutes > 0 ? `${timeLeft.minutes}m ` : ""}
-        {timeLeft.seconds > 0 ? `${timeLeft.seconds}s ` : ""}left!
+        {/* <span>Hurry up! There's a special discount for a limited time </span> */}
+        <span>Hurry up! 60% off for the next </span>
+        <span style={{ fontSize: "20px" }}>
+          {timeLeft.days > 0 ? `${timeLeft.days}d ` : ""}
+          {timeLeft.hours > 0 ? `${timeLeft.hours}h ` : ""}
+          {timeLeft.minutes > 0 ? `${timeLeft.minutes}m ` : ""}
+          {timeLeft.seconds > 0 ? `${timeLeft.seconds}s ` : ""}left!
+        </span>
       </Text>
       {/* </Marquee> */}
+      <DiscountCode />
     </Box>
   );
 };

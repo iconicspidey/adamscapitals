@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = { status: true };
 
 const flashSaleSlice = createSlice({
-  name: "courses",
+  name: "flashsale",
   initialState,
   reducers: {
     stopSale: (state, actions) => {

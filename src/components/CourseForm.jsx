@@ -10,27 +10,31 @@ import {
   FormErrorMessage,
   useToast,
   ButtonGroup,
+  Select,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
+import { ArrowDownIcon } from "@chakra-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import axiosFetch from "./../configs/axiosConfig";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-
+import { useRef } from "react";
 const CourseForm = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const user = useSelector((state) => state);
+  const dateInput = useRef();
   const { token } = user.user;
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-
+  const today = new Date().toISOString().split("T")[0];
   const [course, setCourse] = useState({
-    plan: "",
+    code: "",
+    date: today,
     price: "",
-    description: "",
-    server: "",
-    channel: "",
+    plan: "",
   });
   const [errors, setError] = useState({});
   const handleChange = (event) => {
@@ -46,9 +50,10 @@ const CourseForm = () => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     };
+    console.log(course);
     setLoading(true);
     try {
-      const response = await axiosFetch().post("/create-course", course, {
+      const response = await axiosFetch().post("/coupon", course, {
         Headers: headers,
       });
       toast({
@@ -57,20 +62,14 @@ const CourseForm = () => {
         status: "success",
         description: "A course has been created successfully",
       });
-      setCourse(() => ({ description: "", plan: "", price: "" }));
-      setLoading(false);
+
       navigate("/admin");
     } catch (error) {
-      const { data, status } = error.response;
-      if (status == 400) {
-        setError(data);
-      }
-      if (status == 401) {
-        dispatch({ type: "logout" });
-        navigate("/");
-      }
+      const errorMessage = error.response.data;
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -81,90 +80,87 @@ const CourseForm = () => {
       p="6"
       borderWidth="1px"
       borderRadius="lg"
-      boxShadow="lg">
+      boxShadow="lg"
+    >
       <form onSubmit={formSubmit}>
+        <Text textAlign="center" color="gray">
+          COUPON
+        </Text>
         <Flex direction="column">
-          <FormControl id="planName" isInvalid={errors.plan} mb="4">
-            <FormLabel color="white">Plan Name</FormLabel>
+          <FormControl id="planName" isInvalid={errors?.code} mb="4">
+            <FormLabel color="white">Coupon Code</FormLabel>
             <Input
               required
               color="white"
-              name="plan"
-              value={course.plan}
+              name="code"
+              type="text"
+              value={course.code}
               onChange={handleChange}
-              placeholder="Enter plan name"
+              placeholder="Enter Coupon Code"
             />
             <FormErrorMessage>
               <FormErrorIcon />
-              {errors.plan}
+              {errors?.code}
             </FormErrorMessage>
           </FormControl>
-
-          <FormControl
-            id="courseDescription"
-            isInvalid={errors.description}
-            mb="4">
-            <FormLabel color="white">Course Description</FormLabel>
-            <Textarea
-              required
-              color="white"
-              name="description"
-              value={course.description}
-              onChange={handleChange}
-              placeholder="Enter course description"
-            />
-            <FormErrorMessage>
-              <FormErrorIcon />
-              {errors.description}
-            </FormErrorMessage>
-          </FormControl>
-
-          <FormControl id="coursePrice" isInvalid={errors.plan} mb="4">
-            <FormLabel color="white">Course Price</FormLabel>
+          <FormControl id="coursePrice" isInvalid={errors?.price} mb="4">
+            <FormLabel color="white">Coupon Price</FormLabel>
             <Input
               color="white"
               type="number"
               required
-              placeholder="Enter course price"
+              placeholder="Enter Coupon price"
               name="price"
               value={course.price}
               onChange={handleChange}
             />
             <FormErrorMessage>
               <FormErrorIcon />
-              {errors.price}
+              {errors?.price}
             </FormErrorMessage>
           </FormControl>
-          <FormControl id="coursePrice" isInvalid={errors.server} mb="4">
-            <FormLabel color="white">Server ID</FormLabel>
+          <FormControl id="coursePrice" isInvalid={errors?.date} mb="4">
+            <FormLabel color="white">Expiration Date</FormLabel>
             <Input
-              color="white"
-              type="text"
-              required
-              placeholder="Enter Server ID"
-              name="server"
-              value={course.server}
+              type="date"
+              min={today}
+              name="date"
               onChange={handleChange}
+              color={"white"}
             />
             <FormErrorMessage>
               <FormErrorIcon />
-              {errors.server}
+              {errors?.date}
             </FormErrorMessage>
           </FormControl>
-          <FormControl id="coursePrice" isInvalid={errors.channel} mb="4">
-            <FormLabel color="white">Channel ID</FormLabel>
-            <Input
+          <FormControl id="coursePrice" isInvalid={errors.plan} mb="4">
+            <FormLabel color="white"> Mentorship Type </FormLabel>
+            <Select
+              icon={<ArrowDownIcon />}
               color="white"
-              type="text"
-              required
-              placeholder="Enter Channel ID"
-              name="channel"
-              value={course.channel}
+              // placeholder="Select option"
+              name="plan"
+              value={course.plan}
+              backgroundColor="gray.800"
               onChange={handleChange}
-            />
+              // defaultValue={today}
+            >
+              <option style={{ backgroundColor: "#1a202c" }} value="">
+                Select Mentorship Type
+              </option>
+              <option
+                style={{ backgroundColor: "#1a202c" }}
+                value="one-to-many"
+              >
+                One To Many
+              </option>
+              <option style={{ backgroundColor: "#151e30" }} value="one-to-one">
+                One To One
+              </option>
+            </Select>
             <FormErrorMessage>
               <FormErrorIcon />
-              {errors.channel}
+              {errors?.plan}
             </FormErrorMessage>
           </FormControl>
         </Flex>
@@ -172,10 +168,11 @@ const CourseForm = () => {
           <Button
             onClick={() => navigate("/admin")}
             colorScheme={"yellow"}
-            leftIcon={<ArrowBackIcon />}>
+            leftIcon={<ArrowBackIcon />}
+          >
             Back
           </Button>
-          <Button isDisabled isLoading={loading} type="submit" colorScheme="whatsapp">
+          <Button isLoading={loading} type="submit" colorScheme="whatsapp">
             Submit
           </Button>
         </ButtonGroup>

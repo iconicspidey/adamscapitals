@@ -15,6 +15,7 @@ import {
   FaStore,
   FaBook,
   FaPalfed,
+  FaCode,
 } from "react-icons/fa";
 import { Link as NavLink } from "react-router-dom";
 
@@ -34,7 +35,7 @@ export default function AdminLinks() {
       templateColumns={gridTemplateColumns}>
       <GridItem
         as={NavLink}
-        to={"/admin/student-table"}
+        to={"./student-table"}
         borderWidth="1px"
         borderRadius="lg"
         boxShadow="lg"
@@ -60,7 +61,7 @@ export default function AdminLinks() {
         <Flex align="center" flexDir={"column"}>
           <Icon as={FaBook} color="white" w={6} h={6} mr="4" />
           <Text fontWeight="bold" color="white" fontSize="lg">
-            Create Course
+            Create Coupon
           </Text>
         </Flex>
       </GridItem>
@@ -70,13 +71,13 @@ export default function AdminLinks() {
         borderRadius="lg"
         boxShadow="lg"
         as={NavLink}
-        to={"/admin/manage-courses"}
+        to={"./coupon"}
         bgColor="gray.900"
         mb={{ base: "6", md: "0" }}>
         <Flex align="center" flexDir={"column"}>
           <Icon as={FaCog} color="white" w={6} h={6} mr="4" />
           <Text fontWeight="bold" color="white" fontSize="lg">
-            Manage courses
+            Manage Coupons
           </Text>
         </Flex>
       </GridItem>
@@ -86,13 +87,29 @@ export default function AdminLinks() {
         borderRadius="lg"
         boxShadow="lg"
         as={NavLink}
-        to={"/admin/change-password"}
+        to={"./manage-courses"}
+        bgColor="gray.900"
+        mb={{ base: "6", md: "0" }}>
+        <Flex align="center" flexDir={"column"}>
+          <Icon as={FaCode} color="white" w={6} h={6} mr="4" />
+          <Text fontWeight="bold" color="white" fontSize="lg">
+            Price Settings
+          </Text>
+        </Flex>
+      </GridItem>
+      <GridItem
+        p={{ base: "5", md: "7" }}
+        borderWidth="1px"
+        borderRadius="lg"
+        boxShadow="lg"
+        as={NavLink}
+        to={"./change-password"}
         bgColor="gray.900"
         mb={{ base: "6", md: "0" }}>
         <Flex align="center" flexDir={"column"}>
           <Icon as={FaPalfed} color="white" w={6} h={6} mr="4" />
           <Text fontWeight="bold" color="white" fontSize="lg">
-            password
+            Password
           </Text>
         </Flex>
       </GridItem>
