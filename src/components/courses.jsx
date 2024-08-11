@@ -15,6 +15,8 @@ import axiosFetch from "./../configs/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import PaymentList from "./PaymentsList";
 import moment from "moment";
+import useFetchStudenBook from "../utils/studentbook";
+import DownloadEbook from "./extra/DownloadEbook";
 
 function Courses() {
   const navigate = useNavigate();
@@ -24,6 +26,9 @@ function Courses() {
     const { data } = response;
     return data;
   });
+
+  const { data: studenteBook, isLoading: bookLoading } =
+    useFetchStudenBook(user_id);
   const timestamp = (timestamp) => {
     const timeAgo = moment(timestamp).fromNow();
     return `${timeAgo}`;
@@ -52,13 +57,15 @@ function Courses() {
         as="h1"
         fontSize="2rem"
         textAlign="center"
-        py="10px">
+        py="10px"
+      >
         Plan
       </Heading>
       <Box>
         <Grid
           templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 30%)" }}
-          gap={6}>
+          gap={6}
+        >
           {status == "success" && data.length
             ? data.map((plan) => (
                 <Box
@@ -67,13 +74,15 @@ function Courses() {
                   borderRadius="lg"
                   overflow="hidden"
                   p={6}
-                  bg="gray.900">
+                  bg="gray.900"
+                >
                   <Heading
                     as="h1"
                     textTransform={"capitalize"}
                     mb={4}
                     color="white"
-                    fontSize="xl">
+                    fontSize="xl"
+                  >
                     ADAMCAPITALS FX MENTORSHIP
                   </Heading>
                   <Text color="white" mb={4}>
@@ -91,7 +100,8 @@ function Courses() {
                     <a
                       href={`${plan.discord_link}`}
                       target="_blank"
-                      rel="noopener noreferrer">
+                      rel="noopener noreferrer"
+                    >
                       <IconButton
                         width={"100%"}
                         size={"md"}
@@ -103,7 +113,8 @@ function Courses() {
                       <a
                         href={`${plan.discord_link}`}
                         target="_blank"
-                        rel="noopener noreferrer">
+                        rel="noopener noreferrer"
+                      >
                         <IconButton
                           width={"100%"}
                           size={"md"}
@@ -122,7 +133,8 @@ function Courses() {
         ) : null}
         {status == "success" && !data.length ? (
           <Grid
-            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 30%)" }}>
+            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 30%)" }}
+          >
             <Box borderWidth="1px" borderRadius="lg" py="6" px="4">
               <Text textAlign="center" my={"10px"} color="white">
                 YOU HAVE NOT YET JOIN
@@ -130,12 +142,29 @@ function Courses() {
               <Button
                 colorScheme="whatsapp"
                 width="100%"
-                onClick={() => navigate("/")}>
+                onClick={() => navigate("/")}
+              >
                 JOIN NOW!
               </Button>
             </Box>
           </Grid>
         ) : null}
+        <Flex align="center" justify="center" direction="column" p={5}>
+          <Text py={2} color={"white"} fontSize={20} fontWeight={"bold"}>
+            Your eBook is ready!
+          </Text>
+          {!bookLoading ? (
+            studenteBook.map(() => <DownloadEbook />)
+          ) : (
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
+          )}
+        </Flex>
         <Text textAlign={"center"} fontSize={"xl"} my={"20px"} color={"white"}>
           Initiated Payment and Verification
         </Text>
@@ -146,7 +175,8 @@ function Courses() {
             lg: "repeat(3, 32.90%)",
           }}
           gap={2}
-          overflow="hidden">
+          overflow="hidden"
+        >
           {isSuccess
             ? cryptoData.map((card) => (
                 <PaymentList

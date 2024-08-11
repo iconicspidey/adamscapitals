@@ -14,11 +14,15 @@ import { useState, useEffect } from "react";
 import axiosFetch from "./../configs/axiosConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { setCourses } from "../redux-slice/coursesSlice";
+import EbookCard from "./extra/Ebook";
+import ebookImg from "../assets/e-book.png";
+import useFetchBook from "../utils/book";
 
 const ManageCourses = () => {
   const mentorship = useSelector((state) => state.courses);
   const dispatch = useDispatch();
   const isLargeScreen = useBreakpointValue({ base: false, lg: true });
+  const { data: book, isLoading: bookLoading } = useFetchBook();
   const fetchMentorship = async () => {
     const response = await axiosFetch().get("/mentorship");
     return response.data;
@@ -130,6 +134,33 @@ const ManageCourses = () => {
               </Button>
             </Box>
           ))
+        )}
+      </Flex>
+      <Flex align="center" justify="center" direction="column" p="2">
+        <Text
+          textAlign={"center"}
+          color={"white"}
+          fontSize={"2rem"}
+          marginY={"1rem"}
+        >
+          E Book
+        </Text>
+        {!bookLoading ? (
+          book.map(({ price }) => (
+            <EbookCard
+              photoUrl={ebookImg}
+              price={price}
+              title={"Refine Your Edge"}
+            />
+          ))
+        ) : (
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
         )}
       </Flex>
     </Box>

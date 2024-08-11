@@ -15,9 +15,13 @@ import TestimonialsSlider from "../components/TestimonialsSlider";
 import useFetchCoupons from "../utils/mentorship";
 import { useDispatch, useSelector } from "react-redux";
 import { getMentorship } from "../redux-slice/coursesSlice";
+import EbookCard from "../components/extra/Ebook";
+import ebookImg from "../assets/e-book.png";
+import useFetchBook from "../utils/book";
 
 const Home = () => {
   const courses = useSelector((state) => state.courses);
+  const { data: book, isLoading: bookLoading } = useFetchBook();
   const { data, isLoading, error, isFetching, isSuccess, isFetched } =
     useFetchCoupons();
   const scroll = () => {
@@ -96,7 +100,7 @@ const Home = () => {
         </Box>
       </Box>
       {/*  */}
-      <Box bg="gray.800" py={16}>
+      <Box bg="gray.800" py={10}>
         <Box
           display={"flex"}
           justifyContent={"center"}
@@ -104,7 +108,7 @@ const Home = () => {
           mx="auto"
           id="start"
         >
-          {isFetching ? (
+          {isLoading ? (
             <Spinner
               thickness="4px"
               speed="0.65s"
@@ -116,8 +120,36 @@ const Home = () => {
             <MentorshipCard data={courses} />
           ) : null}
         </Box>
+        <Flex align="center" justify="center" direction="column" p="2">
+          <Text
+            textAlign={"center"}
+            color={"white"}
+            fontSize={"2rem"}
+            marginY={"1rem"}
+          >
+            E Book
+          </Text>
+          {!bookLoading ? (
+            book.map(({ price }) => (
+              <EbookCard
+                photoUrl={ebookImg}
+                price={price}
+                title={"Refine Your Edge"}
+              />
+            ))
+          ) : (
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
+          )}
+        </Flex>
         <TestimonialsSlider />
       </Box>
+
       {/*  */}
       <Box bg="gray.800" id="#about">
         <Box textAlign="center" maxW="800px" mx="auto" py={6}>
